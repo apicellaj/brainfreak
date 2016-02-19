@@ -43,8 +43,7 @@ public class GUI extends JFrame {
 		JLabel codeLabel = new JLabel("Please enter your code below:");
 		JLabel inputLabel = new JLabel("Enter standard input (if any):");
 		JLabel resultLabel = new JLabel("Result:");
-		JLabel comboBoxLabel = new JLabel("Sample programs:");
-		
+		JLabel sampleProgramsLabel = new JLabel("Sample programs:");
 		
 		JButton runButton = new JButton("Run");
 		//**JButton haltButton = new JButton("Halt");
@@ -95,13 +94,22 @@ public class GUI extends JFrame {
         centerPanel.add(inputArea);
         centerPanel.add(resultLabel);
         centerPanel.add(resultArea);
-    
         
         ExampleList el = new ExampleList(this);
-        JComboBox<String> samplePrograms = el.createComboBox();
+        JComboBox<String> sampleProgramsComboBox = el.createComboBox();
         JPanel rightButtonPanel = new JPanel();
         rightButtonPanel.add(runButton);
         //**rightButtonPanel.add(haltButton);
+        
+        JButton cheatSheetButton = new JButton("ASCII Table");
+        cheatSheetButton.addActionListener(new ActionListener() {
+        	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AsciiCheatSheet.getInstance();
+			}
+        	
+        });
         
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
         rightPanel.setPreferredSize(new Dimension(300,800));
@@ -109,13 +117,13 @@ public class GUI extends JFrame {
         rightPanel.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new EtchedBorder()));
         rightPanel.add(rightButtonPanel);
         
-        
         comboPanel.setPreferredSize(new Dimension(100,100));
         comboPanel.setBorder(BorderFactory.createEtchedBorder());
         comboPanel.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new EtchedBorder()));
         
-        comboPanel.add(comboBoxLabel);
-        comboPanel.add(samplePrograms);
+        comboPanel.add(sampleProgramsLabel);
+        comboPanel.add(sampleProgramsComboBox);
+        comboPanel.add(cheatSheetButton);
         rightPanel.add(comboPanel);
         
         frame.getContentPane().add(BorderLayout.EAST, rightPanel);
