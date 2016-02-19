@@ -5,8 +5,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class AsciiCheatSheet extends JDialog {
@@ -32,9 +35,19 @@ public class AsciiCheatSheet extends JDialog {
 		final Object[][] data = getData();
 		final NonEditableModel tableModel = new NonEditableModel(data, columnNames);
 		final JTable cheatSheetTable = new JTable(tableModel);
+		final DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		// Center JTable cells
+		cheatSheetTable.setDefaultRenderer(Object.class, centerRenderer);
+		// Center JTable headers
+		((JLabel) cheatSheetTable.getTableHeader().getDefaultRenderer())
+		.setHorizontalAlignment(SwingConstants.CENTER);
+		
 		cheatSheetTable.setFocusable(false);
 		cheatSheetTable.setRowSelectionAllowed(true);
 		cheatSheetTable.setGridColor(Color.BLACK);
+		
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
 		add(new JScrollPane(cheatSheetTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
