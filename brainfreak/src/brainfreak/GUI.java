@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
@@ -32,7 +33,7 @@ public class GUI extends JFrame {
 		//TODO: Add unit testing
     	//TODO: maybe make a string pool for localization, probably not necessary
     	//TODO: future testing here ->  http://www.hevanet.com/cristofd/brainfuck/tests.b
-    	//TODO: make text area scrollable (look it up)
+    	//TODO: add ability to resize frame, enums for various preset lengths
     	
 		JFrame frame = new JFrame();
 		
@@ -43,15 +44,14 @@ public class GUI extends JFrame {
 		JLabel codeLabel = new JLabel("Please enter your code below:");
 		JLabel inputLabel = new JLabel("Enter standard input (if any):");
 		JLabel resultLabel = new JLabel("Result:");
-		JLabel comboBoxLabel = new JLabel("Sample programs:");
-		
+		JLabel sampleProgramsLabel = new JLabel("Sample programs:");
 		
 		JButton runButton = new JButton("Run");
 		//**JButton haltButton = new JButton("Halt");
 		
-		codeArea = new JTextArea(20,70);
-		inputArea = new JTextArea(3,70);
-		resultArea = new JTextArea(3,70);
+		codeArea = new JTextArea(20,50);
+		inputArea = new JTextArea(2,50);
+		resultArea = new JTextArea(4,50);
 		
 		resultArea.setEditable(false);
 		codeArea.setAutoscrolls(true);
@@ -88,20 +88,33 @@ public class GUI extends JFrame {
 				launchInterpreter();
 		    }
     	});
+
+		JScrollPane codeAreaScrollPane = new JScrollPane(codeArea);
+		JScrollPane inputAreaScrollPane = new JScrollPane(inputArea);
+		JScrollPane resultAreaScrollPane = new JScrollPane(resultArea);
     	
     	centerPanel.add(codeLabel);
-        centerPanel.add(codeArea);
+    	centerPanel.add(codeAreaScrollPane);
         centerPanel.add(inputLabel);
-        centerPanel.add(inputArea);
+        centerPanel.add(inputAreaScrollPane);
         centerPanel.add(resultLabel);
-        centerPanel.add(resultArea);
-    
+        centerPanel.add(resultAreaScrollPane);
         
         ExampleList el = new ExampleList(this);
-        JComboBox<String> samplePrograms = el.createComboBox();
+        JComboBox<String> sampleProgramsComboBox = el.createComboBox();
         JPanel rightButtonPanel = new JPanel();
         rightButtonPanel.add(runButton);
         //**rightButtonPanel.add(haltButton);
+        
+        JButton cheatSheetButton = new JButton("ASCII Table");
+        cheatSheetButton.addActionListener(new ActionListener() {
+        	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AsciiCheatSheet.getInstance();
+			}
+        	
+        });
         
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
         rightPanel.setPreferredSize(new Dimension(300,800));
@@ -109,17 +122,17 @@ public class GUI extends JFrame {
         rightPanel.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new EtchedBorder()));
         rightPanel.add(rightButtonPanel);
         
-        
         comboPanel.setPreferredSize(new Dimension(100,100));
         comboPanel.setBorder(BorderFactory.createEtchedBorder());
         comboPanel.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new EtchedBorder()));
         
-        comboPanel.add(comboBoxLabel);
-        comboPanel.add(samplePrograms);
+        comboPanel.add(sampleProgramsLabel);
+        comboPanel.add(sampleProgramsComboBox);
+        comboPanel.add(cheatSheetButton);
         rightPanel.add(comboPanel);
         
         frame.getContentPane().add(BorderLayout.EAST, rightPanel);
-        frame.getContentPane().add(BorderLayout.WEST, Box.createRigidArea(new Dimension(100,0)));
+        frame.getContentPane().add(BorderLayout.WEST, Box.createRigidArea(new Dimension(50,0)));
         frame.getContentPane().add(BorderLayout.CENTER, centerPanel);
         //frame.setSize(1280, 720);
         frame.setSize(960, 540);
