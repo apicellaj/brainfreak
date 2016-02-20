@@ -28,11 +28,13 @@ class Interpreter {
     }
     
     private void run() {
-		//TODO: check for valid amounts of input before running
-		//TODO: possibly change bracket check to a void function
-		if(!bracketCheck()) {
+		if(!hasValidBrackets()) {
 		    result.append("ERROR: Loop brackets paired incorrectly.");
 		    return;
+		}
+		if (!hasEnoughInputData()) {
+			result.append("ERROR: Insufficient input data.");
+			return;
 		}
 		long startTime = System.currentTimeMillis();
 		decode(codePosition);
@@ -127,7 +129,7 @@ class Interpreter {
         return code.length();
     }
     
-    private boolean bracketCheck() {
+    private boolean hasValidBrackets() {
         Stack<Character> s = new Stack<>();
         for (int pos = 0; pos < code.length(); pos++) {
             if (code.charAt(pos) == '[') s.add(code.charAt(pos));
@@ -137,5 +139,14 @@ class Interpreter {
             }
         }
         return s.isEmpty();
+    }
+    
+    private boolean hasEnoughInputData() {
+    	final int inputCharacterLength = code.replaceAll("[^\\,\\;]", "").length();
+    	final int inputArraySize = inputArray == null ? 0 : inputArray.length;
+    	if (inputCharacterLength < inputArraySize) {
+    		result.append("WARNING: Unused input data.\n");
+    	}
+		return inputCharacterLength <= inputArraySize ? true: false;
     }
 }
