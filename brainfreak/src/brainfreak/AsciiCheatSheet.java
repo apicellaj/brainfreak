@@ -3,6 +3,7 @@ package brainfreak;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.KeyListener;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -172,6 +173,10 @@ public class AsciiCheatSheet extends JDialog {
 	    public boolean isCellEditable(int row, int column) {
 	        return false;
 	    }
+	}
+	
+	public void addCheatSheetKeyListener(KeyListener keyListener) {
+		this.addKeyListener(keyListener);
 	}
 	
 }

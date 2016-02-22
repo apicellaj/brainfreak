@@ -92,7 +92,8 @@ public class Controller {
 	class CheatSheetActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			AsciiCheatSheet.getInstance();
+			AsciiCheatSheet cheat = AsciiCheatSheet.getInstance();
+			cheat.addCheatSheetKeyListener(new CheatSheetKeyListener(cheat));
 		}
 	}
 	
@@ -102,6 +103,30 @@ public class Controller {
 			final boolean hasMemoryWrap = gui.hasMemoryWrap();
 			interpreter.setMemoryWrap(hasMemoryWrap);
 		}
+	}
+	
+	class CheatSheetKeyListener implements KeyListener {
+		AsciiCheatSheet cheat;
+		
+		public CheatSheetKeyListener(AsciiCheatSheet cheat) {
+			this.cheat = cheat;
+		}
+		
+		@Override
+		public void keyTyped(KeyEvent e) {
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				cheat.dispose();
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+		}
+		
 	}
 	
 }
