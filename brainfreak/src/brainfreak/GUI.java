@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,8 +27,11 @@ public class GUI extends JFrame {
 	private JTextArea codeArea;
     private JTextArea inputArea;
     private JTextArea resultArea;
+    private JLabel debugDisplayLabel;
     private JButton runButton;
     private JButton cheatSheetButton;
+    private JCheckBox extendedModeCheckBox;
+    private JCheckBox debugModeCheckBox;
     
     public GUI() {
     	createAndShowGui();
@@ -43,12 +47,18 @@ public class GUI extends JFrame {
 		
 		JPanel rightPanel = new JPanel();
 		JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JPanel comboPanel = new JPanel();
+		JPanel debugPanel = new JPanel();
 	    
-		JLabel codeLabel = new JLabel("Please enter your code below:");
+		JLabel codeLabel = new JLabel("Enter your code below:");
 		JLabel inputLabel = new JLabel("Enter standard input (if any):");
-		JLabel resultLabel = new JLabel("Result:");
+		JLabel resultLabel = new JLabel("Output:");
 		JLabel sampleProgramsLabel = new JLabel("Sample programs:");
+		JLabel extendedBfLabel = new JLabel("Add support for ';' and ':'");
+		JLabel debugModeLabel = new JLabel("Enable debug mode");
+		debugDisplayLabel = new JLabel();
+		
+		extendedModeCheckBox = new JCheckBox();
+		debugModeCheckBox = new JCheckBox();
 		
 		runButton = new JButton("Run");
 		//**JButton haltButton = new JButton("Halt");
@@ -70,14 +80,17 @@ public class GUI extends JFrame {
         centerPanel.add(inputAreaScrollPane);
         centerPanel.add(resultLabel);
         centerPanel.add(resultAreaScrollPane);
+
+        cheatSheetButton = new JButton("ASCII Table");
         
         ExampleList el = new ExampleList(this);
         JComboBox<String> sampleProgramsComboBox = el.createComboBox();
         JPanel rightButtonPanel = new JPanel();
+        rightButtonPanel.add(sampleProgramsLabel);
+        rightButtonPanel.add(sampleProgramsComboBox);
         rightButtonPanel.add(runButton);
         //**rightButtonPanel.add(haltButton);
-        
-        cheatSheetButton = new JButton("ASCII Table");
+        rightButtonPanel.add(cheatSheetButton);
         
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
         rightPanel.setPreferredSize(new Dimension(300,800));
@@ -85,14 +98,17 @@ public class GUI extends JFrame {
         rightPanel.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new EtchedBorder()));
         rightPanel.add(rightButtonPanel);
         
-        comboPanel.setPreferredSize(new Dimension(100,100));
-        comboPanel.setBorder(BorderFactory.createEtchedBorder());
-        comboPanel.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new EtchedBorder()));
+        debugPanel.setPreferredSize(new Dimension(100,100));
+        debugPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        debugPanel.setBorder(BorderFactory.createEtchedBorder());
+        debugPanel.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new EtchedBorder()));
         
-        comboPanel.add(sampleProgramsLabel);
-        comboPanel.add(sampleProgramsComboBox);
-        comboPanel.add(cheatSheetButton);
-        rightPanel.add(comboPanel);
+        debugPanel.add(extendedModeCheckBox);
+        debugPanel.add(extendedBfLabel);
+        debugPanel.add(debugModeCheckBox);
+        debugPanel.add(debugModeLabel);
+        debugPanel.add(debugDisplayLabel);
+        rightPanel.add(debugPanel);
         
         frame.getContentPane().add(BorderLayout.EAST, rightPanel);
         frame.getContentPane().add(BorderLayout.WEST, Box.createRigidArea(new Dimension(50,0)));
@@ -103,6 +119,14 @@ public class GUI extends JFrame {
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setTitle("Brainfreak Interpreter");
+    }
+    
+    public boolean isInDebugMode() {
+    	return debugModeCheckBox.isSelected();
+    }
+    
+    public boolean hasExtendedSupport() {
+    	return extendedModeCheckBox.isSelected();
     }
 
     public String getInputAreaText() {
@@ -119,6 +143,10 @@ public class GUI extends JFrame {
     
     public void setResultAreaText(String text) {
     	resultArea.setText(text);
+    }
+    
+    public void setDebugDisplayLabel(String text) {
+    	debugDisplayLabel.setText(text);
     }
     
     public void addRunButtonListener(ActionListener actionListener) {
