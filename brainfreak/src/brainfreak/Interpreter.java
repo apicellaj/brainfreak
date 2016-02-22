@@ -10,24 +10,26 @@ class Interpreter {
     //TODO: find a more efficient way to write to resultArea
     //TODO: allow operation to be cancelled with a button (halt button)
     
-    private int memoryPosition = 0;
-    private int codePosition = 0;
-    private int inputPosition = 0;
-    private final String code;
-    private StringBuilder result = new StringBuilder();
-    private long numberOfCalculations = 0L;
+    private int memoryPosition;
+    private int codePosition;
+    private int inputPosition;
+    private String code;
+    private StringBuilder result;
+    private long numberOfCalculations;
     private static final long MAX_CALCULATIONS_ALLOWED = Integer.MAX_VALUE;
     private static final int MEMORY_SIZE = 30000;
     private int[] inputArray;
-    private int[] memoryArray = new int[MEMORY_SIZE];
+    private int[] memoryArray;
     
-    Interpreter(String simplifiedCode, String standardInput) {
-		code = simplifiedCode;
-		inputArray = createInputArray(standardInput);
-		run();
+    public Interpreter() {
+    	
     }
     
-    private void run() {
+    public void run(String simplifiedCode, String standardInput) {
+    	variableInitialization();
+    	code = simplifiedCode;
+    	inputArray = createInputArray(standardInput);
+    	result = new StringBuilder();
 		if(!hasValidBrackets()) {
 		    result.append("ERROR: Loop brackets paired incorrectly.");
 		    return;
@@ -42,6 +44,14 @@ class Interpreter {
     	long totalTime = endTime - startTime;
     	System.out.println(totalTime);
 		result.append("\n\n" + "Total running time: " + totalTime + " ms");
+    }
+    
+    private void variableInitialization() {
+    	memoryPosition = 0;
+    	codePosition = 0;
+    	inputPosition = 0;
+    	numberOfCalculations = 0;
+    	memoryArray = new int[MEMORY_SIZE];
     }
     
     public String getResult() {

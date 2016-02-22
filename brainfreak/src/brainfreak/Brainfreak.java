@@ -4,7 +4,8 @@ public class Brainfreak {
 	  
     public static void main(String args[]) {
 		final GUI gui = new GUI();
-		gui.createAndShowGui();
+		final Interpreter interpreter = new Interpreter();
+		final Controller controller = new Controller(gui, interpreter);
     }
 
 }
