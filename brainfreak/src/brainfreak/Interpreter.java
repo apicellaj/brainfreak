@@ -7,15 +7,17 @@ class Interpreter {
     
     //TODO: maybe create an enum for the different array bit states
     //TODO: maybe convert BF string with run length encoding (RLE)* for optimization
-    //TODO: reduce scope as much as possible, use final modifier where possible
     //TODO: find a more efficient way to write to resultArea
     //TODO: allow operation to be cancelled with a button (halt button)
     
     private int memoryPosition;
     private int codePosition;
     private int inputPosition;
+    private boolean memoryWrap = false;
+    //private boolean stopProgram = false;
     private String code;
     private StringBuilder result;
+    private StringBuilder warnings;
     private long numberOfCalculations;
     private long startTime;
     private long endTime;
@@ -32,8 +34,8 @@ class Interpreter {
     	code = simplifiedCode;
     	inputArray = createInputArray(standardInput);
 		checkForErrors();
-		
 		decode(codePosition);
+		appendWarnings();
 		endTime   = System.currentTimeMillis();
     }
     
@@ -44,17 +46,16 @@ class Interpreter {
     	numberOfCalculations = 0;
     	memoryArray = new int[MEMORY_SIZE];
     	result = new StringBuilder();
+    	warnings = new StringBuilder();
     	startTime = System.currentTimeMillis();
     }
     
     private void checkForErrors() {
     	if(!hasValidBrackets()) {
-		    result.append("ERROR: Loop brackets paired incorrectly.");
-		    return;
+		    triggerError("Loop brackets paired incorrectly.");
 		}
 		if (!hasEnoughInputData()) {
-			result.append("ERROR: Insufficient input data.");
-			return;
+			triggerError("Insufficient input data.");
 		}
     }
     
@@ -79,8 +80,7 @@ class Interpreter {
             interpret(code.charAt(codePosition));
             numberOfCalculations++;
             if (numberOfCalculations == MAX_CALCULATIONS_ALLOWED) {
-            	result.append("\n\nERROR: Exceeded maximum number of calculations: " + MAX_CALCULATIONS_ALLOWED);
-                return;
+            	triggerError("Exceeded maximum number of calculations: " + MAX_CALCULATIONS_ALLOWED);
             }
         }
     }
@@ -111,11 +111,21 @@ class Interpreter {
 	    	case '[' :	enterLoop(codePosition+1);
 	    				break;
     	}
-    	//TODO: make memory wrap optional
+    	if (memoryWrap) {
+    		memoryWrap();
+    	} else {
+    		if (memoryPosition < 0) {
+    			triggerError("Memory Underflow at character " + codePosition);
+    		} else if (memoryPosition > MEMORY_SIZE) {
+    			triggerError("Memory Overflow at character " + codePosition);
+    		}
+    	}
+    }
+    
+    private void memoryWrap() {
     	if (memoryPosition >= MEMORY_SIZE) {
     		memoryPosition %= MEMORY_SIZE;
-        }
-    	if (memoryPosition < 0) {
+        } else if (memoryPosition < 0) {
         	memoryPosition += MEMORY_SIZE;
         }
     }
@@ -140,7 +150,7 @@ class Interpreter {
             	return j;
             }
         }
-        result.append("\n\nERROR: Looping problem.");
+        triggerError("Looping problem at: " + codePosition);
         return code.length();
     }
     
@@ -164,13 +174,30 @@ class Interpreter {
     	final int inputCharacterLength = code.replaceAll("[^\\,\\;]", "").length();
     	final int inputArraySize = inputArray == null ? 0 : inputArray.length;
     	if (inputCharacterLength < inputArraySize) {
-    		result.append("WARNING: Unused input data.\n");
+    		warnings.append("WARNING: Unused input data.\n");
     	}
 		return inputCharacterLength <= inputArraySize ? true: false;
+    }
+    
+    private void triggerError(String error) {
+    	result = new StringBuilder("ERROR: " + error);
+    	exitProgram();
+    }
+    
+    private void appendWarnings() {
+    	result.append(warnings);
+    }
+    
+    private void exitProgram() {
+    	codePosition = code.length();
     }
     
     public String getDebugInfo() {
     	final long totalTime = endTime - startTime;
     	return "Executed " + NumberFormat.getInstance().format(numberOfCalculations) + " commands in " + totalTime + " ms.";
+    }
+    
+    public void setMemoryWrap(boolean enableMemoryWrap) {
+    	memoryWrap = enableMemoryWrap;
     }
 }

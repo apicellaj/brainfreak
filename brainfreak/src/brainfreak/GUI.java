@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
@@ -32,6 +33,7 @@ public class GUI extends JFrame {
     private JButton cheatSheetButton;
     private JCheckBox extendedModeCheckBox;
     private JCheckBox debugModeCheckBox;
+    private JCheckBox memoryWrapCheckBox;
     
     public GUI() {
     	createAndShowGui();
@@ -54,14 +56,16 @@ public class GUI extends JFrame {
 		JLabel resultLabel = new JLabel("Output:");
 		JLabel sampleProgramsLabel = new JLabel("Sample programs:");
 		JLabel extendedBfLabel = new JLabel("Add support for ';' and ':'");
-		JLabel debugModeLabel = new JLabel("Enable debug mode");
+		JLabel debugModeLabel = new JLabel("Enable debug mode\t\t\t\t\t");
+		JLabel memoryWrapLabel = new JLabel("Enable memory wrap\t\t\t\t\t");
 		debugDisplayLabel = new JLabel(" ");
 		
 		extendedModeCheckBox = new JCheckBox();
 		debugModeCheckBox = new JCheckBox();
+		memoryWrapCheckBox = new JCheckBox();
 		
 		runButton = new JButton("Run");
-		//**JButton haltButton = new JButton("Halt");
+		//**JButton haltButton = new JButton("Stop");
 		
 		codeArea = new JTextArea(19,50);
 		inputArea = new JTextArea(2,50);
@@ -111,6 +115,8 @@ public class GUI extends JFrame {
         debugPanel.add(extendedBfLabel);
         debugPanel.add(debugModeCheckBox);
         debugPanel.add(debugModeLabel);
+        debugPanel.add(memoryWrapCheckBox);
+        debugPanel.add(memoryWrapLabel);
         rightPanel.add(debugPanel);
         
         frame.getContentPane().add(BorderLayout.EAST, rightPanel);
@@ -130,6 +136,10 @@ public class GUI extends JFrame {
     
     public boolean hasExtendedSupport() {
     	return extendedModeCheckBox.isSelected();
+    }
+    
+    public boolean hasMemoryWrap() {
+    	return memoryWrapCheckBox.isSelected();
     }
 
     public String getInputAreaText() {
@@ -162,6 +172,10 @@ public class GUI extends JFrame {
     
     public void addCheatSheetButtonActionListener(ActionListener actionListener) {
     	cheatSheetButton.addActionListener(actionListener);
+    }
+    
+    public void addMemoryWrapItemListener(ItemListener itemListener) {
+    	memoryWrapCheckBox.addItemListener(itemListener);
     }
     
 }

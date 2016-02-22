@@ -2,6 +2,8 @@ package brainfreak;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -17,6 +19,7 @@ public class Controller {
 		gui.addRunButtonListener(new runButonActionListener());
 		gui.addReturnKeyListener(new ReturnKeyKeyListener());
 		gui.addCheatSheetButtonActionListener(new CheatSheetActionListener());
+		gui.addMemoryWrapItemListener(new MemoryWrapItemListener());
 	}
 	
 	public String getInputAreaText() {
@@ -36,7 +39,6 @@ public class Controller {
 	}
 	
 	private void launchInterpreter() {
-		//TODO: change the regex here to be customizable based on which check boxes are toggled (brainfreak++)
 		final String regexPattern;
 		if (gui.hasExtendedSupport()) {
 			regexPattern = "[^\\>\\<\\+\\-\\.\\,\\:\\;\\[\\]]";
@@ -45,6 +47,7 @@ public class Controller {
 		}
 		final String bfCode = getCodeAreaText().replaceAll(regexPattern, "").trim();
 		final String stdIn =  getInputAreaText().trim();
+		interpreter.setMemoryWrap(gui.hasMemoryWrap());
 		interpreter.run(bfCode, stdIn);
 		gui.setResultAreaText(interpreter.getResult());
 		if (gui.isInDebugMode()) {
@@ -90,6 +93,14 @@ public class Controller {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			AsciiCheatSheet.getInstance();
+		}
+	}
+	
+	class MemoryWrapItemListener implements ItemListener {
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			final boolean hasMemoryWrap = gui.hasMemoryWrap();
+			interpreter.setMemoryWrap(hasMemoryWrap);
 		}
 	}
 	
