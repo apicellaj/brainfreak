@@ -22,28 +22,19 @@ class Interpreter {
     private int[] memoryArray;
     
     public Interpreter() {
-    	
     }
     
     public void run(String simplifiedCode, String standardInput) {
     	variableInitialization();
     	code = simplifiedCode;
     	inputArray = createInputArray(standardInput);
-    	result = new StringBuilder();
-		if(!hasValidBrackets()) {
-		    result.append("ERROR: Loop brackets paired incorrectly.");
-		    return;
-		}
-		if (!hasEnoughInputData()) {
-			result.append("ERROR: Insufficient input data.");
-			return;
-		}
-		long startTime = System.currentTimeMillis();
+		checkForErrors();
+		
+		final long startTime = System.currentTimeMillis();
 		decode(codePosition);
-		long endTime   = System.currentTimeMillis();
-    	long totalTime = endTime - startTime;
-    	System.out.println(totalTime);
-		result.append("\n\n" + "Total running time: " + totalTime + " ms");
+		final long endTime   = System.currentTimeMillis();
+    	final long totalTime = endTime - startTime;
+		result.append("\n" + "Total running time: " + totalTime + " ms");
     }
     
     private void variableInitialization() {
@@ -52,6 +43,18 @@ class Interpreter {
     	inputPosition = 0;
     	numberOfCalculations = 0;
     	memoryArray = new int[MEMORY_SIZE];
+    	result = new StringBuilder();
+    }
+    
+    private void checkForErrors() {
+    	if(!hasValidBrackets()) {
+		    result.append("ERROR: Loop brackets paired incorrectly.");
+		    return;
+		}
+		if (!hasEnoughInputData()) {
+			result.append("ERROR: Insufficient input data.");
+			return;
+		}
     }
     
     public String getResult() {
@@ -82,38 +85,38 @@ class Interpreter {
     }
     
     private void interpret(char c) {
-        if (c == ';') {
-        	memoryArray[memoryPosition] = inputArray[inputPosition];
-            inputPosition++;
+    	final char value;
+    	switch (c) {
+	    	case ';' : 	memoryArray[memoryPosition] = inputArray[inputPosition++];
+	        			break;
+	    	case ':' :	result.append(memoryArray[memoryPosition]).append(' ');
+	    				break;
+	    	case ',' :	value = (char) (inputArray[inputPosition++]+48);
+				        memoryArray[memoryPosition] = (int) value;
+				        break;
+	    	case '.' : 	if (memoryArray[memoryPosition] >= 10) {
+				    		value = (char) memoryArray[memoryPosition];
+				            result.append(value);
+		            	}
+	    				break;
+	    	case '>' : 	memoryPosition++;
+	    				break;
+	    	case '<' : 	memoryPosition--;
+	    				break;
+	    	case '+' :	memoryArray[memoryPosition]++;
+	    				break;
+	    	case '-' :	memoryArray[memoryPosition]--;
+	    				break;
+	    	case '[' :	enterLoop(codePosition+1);
+	    				break;
+    	}
+    	//TODO: make memory wrap optional
+    	if (memoryPosition >= MEMORY_SIZE) {
+    		memoryPosition %= MEMORY_SIZE;
         }
-        if (c == ':') result.append(memoryArray[memoryPosition]).append(' ');
-        if (c == ',') {
-            char value = (char) (inputArray[inputPosition]+48);
-            memoryArray[memoryPosition] = (int) value;
-            inputPosition++;
-        }
-        if (c == '.') {
-            if (memoryArray[memoryPosition] < 10) {
-              return;
-            }
-            char value = (char) memoryArray[memoryPosition];
-            result.append(value);
-        }
-        if (c == '>') {
-            memoryPosition++;
-            if (memoryPosition >= MEMORY_SIZE) {
-        	memoryPosition %= MEMORY_SIZE;
-            }
-        }
-        if (c == '<') {
-            memoryPosition--;
-            if (memoryPosition < 0) {
+    	if (memoryPosition < 0) {
         	memoryPosition += MEMORY_SIZE;
-            }
         }
-        if (c == '+') memoryArray[memoryPosition]++;
-        if (c == '-') memoryArray[memoryPosition]--;
-        if (c == '[') enterLoop(codePosition+1);
     }
     
     private void enterLoop(int startOfLoop) {
