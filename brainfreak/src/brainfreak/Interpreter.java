@@ -1,5 +1,6 @@
 package brainfreak;
 
+import java.text.NumberFormat;
 import java.util.Stack;
 
 class Interpreter {
@@ -16,6 +17,8 @@ class Interpreter {
     private String code;
     private StringBuilder result;
     private long numberOfCalculations;
+    private long startTime;
+    private long endTime;
     private static final long MAX_CALCULATIONS_ALLOWED = Integer.MAX_VALUE;
     private static final int MEMORY_SIZE = 30000;
     private int[] inputArray;
@@ -30,11 +33,8 @@ class Interpreter {
     	inputArray = createInputArray(standardInput);
 		checkForErrors();
 		
-		final long startTime = System.currentTimeMillis();
 		decode(codePosition);
-		final long endTime   = System.currentTimeMillis();
-    	final long totalTime = endTime - startTime;
-		result.append("\n" + "Total running time: " + totalTime + " ms");
+		endTime   = System.currentTimeMillis();
     }
     
     private void variableInitialization() {
@@ -44,6 +44,7 @@ class Interpreter {
     	numberOfCalculations = 0;
     	memoryArray = new int[MEMORY_SIZE];
     	result = new StringBuilder();
+    	startTime = System.currentTimeMillis();
     }
     
     private void checkForErrors() {
@@ -166,5 +167,10 @@ class Interpreter {
     		result.append("WARNING: Unused input data.\n");
     	}
 		return inputCharacterLength <= inputArraySize ? true: false;
+    }
+    
+    public String getDebugInfo() {
+    	final long totalTime = endTime - startTime;
+    	return "Executed " + NumberFormat.getInstance().format(numberOfCalculations) + " commands in " + totalTime + " ms.";
     }
 }

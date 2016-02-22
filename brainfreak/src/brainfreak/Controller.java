@@ -37,10 +37,22 @@ public class Controller {
 	
 	private void launchInterpreter() {
 		//TODO: change the regex here to be customizable based on which check boxes are toggled (brainfreak++)
-		final String bfCode = getCodeAreaText().replaceAll("[^\\>\\<\\+\\-\\.\\,\\:\\;\\[\\]]", "").trim();
+		final String regexPattern;
+		if (gui.hasExtendedSupport()) {
+			regexPattern = "[^\\>\\<\\+\\-\\.\\,\\:\\;\\[\\]]";
+		} else {
+			regexPattern = "[^\\>\\<\\+\\-\\.\\,\\[\\]]";
+		}
+		final String bfCode = getCodeAreaText().replaceAll(regexPattern, "").trim();
 		final String stdIn =  getInputAreaText().trim();
 		interpreter.run(bfCode, stdIn);
 		gui.setResultAreaText(interpreter.getResult());
+		if (gui.isInDebugMode()) {
+			final String debugInformation = interpreter.getDebugInfo();
+			gui.setDebugDisplayLabel(debugInformation);
+		} else {
+			gui.setDebugDisplayLabel(" ");
+		}
 	}
 	
 	class runButonActionListener implements ActionListener {

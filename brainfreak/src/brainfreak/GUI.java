@@ -55,7 +55,7 @@ public class GUI extends JFrame {
 		JLabel sampleProgramsLabel = new JLabel("Sample programs:");
 		JLabel extendedBfLabel = new JLabel("Add support for ';' and ':'");
 		JLabel debugModeLabel = new JLabel("Enable debug mode");
-		debugDisplayLabel = new JLabel();
+		debugDisplayLabel = new JLabel(" ");
 		
 		extendedModeCheckBox = new JCheckBox();
 		debugModeCheckBox = new JCheckBox();
@@ -63,12 +63,15 @@ public class GUI extends JFrame {
 		runButton = new JButton("Run");
 		//**JButton haltButton = new JButton("Halt");
 		
-		codeArea = new JTextArea(20,50);
+		codeArea = new JTextArea(19,50);
 		inputArea = new JTextArea(2,50);
 		resultArea = new JTextArea(4,50);
 		
 		resultArea.setEditable(false);
 		codeArea.setAutoscrolls(true);
+		codeArea.setLineWrap(true);
+		inputArea.setLineWrap(true);
+		resultArea.setLineWrap(true);
 
 		JScrollPane codeAreaScrollPane = new JScrollPane(codeArea);
 		JScrollPane inputAreaScrollPane = new JScrollPane(inputArea);
@@ -80,6 +83,7 @@ public class GUI extends JFrame {
         centerPanel.add(inputAreaScrollPane);
         centerPanel.add(resultLabel);
         centerPanel.add(resultAreaScrollPane);
+        centerPanel.add(debugDisplayLabel);
 
         cheatSheetButton = new JButton("ASCII Table");
         
@@ -107,7 +111,6 @@ public class GUI extends JFrame {
         debugPanel.add(extendedBfLabel);
         debugPanel.add(debugModeCheckBox);
         debugPanel.add(debugModeLabel);
-        debugPanel.add(debugDisplayLabel);
         rightPanel.add(debugPanel);
         
         frame.getContentPane().add(BorderLayout.EAST, rightPanel);
