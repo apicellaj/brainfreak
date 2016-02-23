@@ -4,12 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,8 +28,12 @@ public class GUI extends JFrame {
 	private JTextArea codeArea;
     private JTextArea inputArea;
     private JTextArea resultArea;
+    private JLabel debugDisplayLabel;
     private JButton runButton;
     private JButton cheatSheetButton;
+    private JCheckBox extendedModeCheckBox;
+    private JCheckBox debugModeCheckBox;
+    private JCheckBox memoryWrapCheckBox;
     
     public GUI() {
     	createAndShowGui();
@@ -43,22 +49,33 @@ public class GUI extends JFrame {
 		
 		JPanel rightPanel = new JPanel();
 		JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JPanel comboPanel = new JPanel();
+		JPanel debugPanel = new JPanel();
 	    
-		JLabel codeLabel = new JLabel("Please enter your code below:");
+		JLabel codeLabel = new JLabel("Enter your code below:");
 		JLabel inputLabel = new JLabel("Enter standard input (if any):");
-		JLabel resultLabel = new JLabel("Result:");
+		JLabel resultLabel = new JLabel("Output:");
 		JLabel sampleProgramsLabel = new JLabel("Sample programs:");
+		JLabel extendedBfLabel = new JLabel("Add support for ';' and ':'");
+		JLabel debugModeLabel = new JLabel("Enable debug mode\t\t\t\t\t");
+		JLabel memoryWrapLabel = new JLabel("Enable memory wrap\t\t\t\t\t");
+		debugDisplayLabel = new JLabel(" ");
+		
+		extendedModeCheckBox = new JCheckBox();
+		debugModeCheckBox = new JCheckBox();
+		memoryWrapCheckBox = new JCheckBox();
 		
 		runButton = new JButton("Run");
-		//**JButton haltButton = new JButton("Halt");
+		//**JButton haltButton = new JButton("Stop");
 		
-		codeArea = new JTextArea(20,50);
+		codeArea = new JTextArea(19,50);
 		inputArea = new JTextArea(2,50);
 		resultArea = new JTextArea(4,50);
 		
 		resultArea.setEditable(false);
 		codeArea.setAutoscrolls(true);
+		codeArea.setLineWrap(true);
+		inputArea.setLineWrap(true);
+		resultArea.setLineWrap(true);
 
 		JScrollPane codeAreaScrollPane = new JScrollPane(codeArea);
 		JScrollPane inputAreaScrollPane = new JScrollPane(inputArea);
@@ -70,14 +87,18 @@ public class GUI extends JFrame {
         centerPanel.add(inputAreaScrollPane);
         centerPanel.add(resultLabel);
         centerPanel.add(resultAreaScrollPane);
+        centerPanel.add(debugDisplayLabel);
+
+        cheatSheetButton = new JButton("ASCII Table");
         
         ExampleList el = new ExampleList(this);
         JComboBox<String> sampleProgramsComboBox = el.createComboBox();
         JPanel rightButtonPanel = new JPanel();
+        rightButtonPanel.add(sampleProgramsLabel);
+        rightButtonPanel.add(sampleProgramsComboBox);
         rightButtonPanel.add(runButton);
         //**rightButtonPanel.add(haltButton);
-        
-        cheatSheetButton = new JButton("ASCII Table");
+        rightButtonPanel.add(cheatSheetButton);
         
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
         rightPanel.setPreferredSize(new Dimension(300,800));
@@ -85,14 +106,18 @@ public class GUI extends JFrame {
         rightPanel.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new EtchedBorder()));
         rightPanel.add(rightButtonPanel);
         
-        comboPanel.setPreferredSize(new Dimension(100,100));
-        comboPanel.setBorder(BorderFactory.createEtchedBorder());
-        comboPanel.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new EtchedBorder()));
+        debugPanel.setPreferredSize(new Dimension(100,100));
+        debugPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        debugPanel.setBorder(BorderFactory.createEtchedBorder());
+        debugPanel.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new EtchedBorder()));
         
-        comboPanel.add(sampleProgramsLabel);
-        comboPanel.add(sampleProgramsComboBox);
-        comboPanel.add(cheatSheetButton);
-        rightPanel.add(comboPanel);
+        debugPanel.add(extendedModeCheckBox);
+        debugPanel.add(extendedBfLabel);
+        debugPanel.add(debugModeCheckBox);
+        debugPanel.add(debugModeLabel);
+        debugPanel.add(memoryWrapCheckBox);
+        debugPanel.add(memoryWrapLabel);
+        rightPanel.add(debugPanel);
         
         frame.getContentPane().add(BorderLayout.EAST, rightPanel);
         frame.getContentPane().add(BorderLayout.WEST, Box.createRigidArea(new Dimension(50,0)));
@@ -103,6 +128,18 @@ public class GUI extends JFrame {
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setTitle("Brainfreak Interpreter");
+    }
+    
+    public boolean isInDebugMode() {
+    	return debugModeCheckBox.isSelected();
+    }
+    
+    public boolean hasExtendedSupport() {
+    	return extendedModeCheckBox.isSelected();
+    }
+    
+    public boolean hasMemoryWrap() {
+    	return memoryWrapCheckBox.isSelected();
     }
 
     public String getInputAreaText() {
@@ -121,6 +158,10 @@ public class GUI extends JFrame {
     	resultArea.setText(text);
     }
     
+    public void setDebugDisplayLabel(String text) {
+    	debugDisplayLabel.setText(text);
+    }
+    
     public void addRunButtonListener(ActionListener actionListener) {
     	runButton.addActionListener(actionListener);
     }
@@ -131,6 +172,10 @@ public class GUI extends JFrame {
     
     public void addCheatSheetButtonActionListener(ActionListener actionListener) {
     	cheatSheetButton.addActionListener(actionListener);
+    }
+    
+    public void addMemoryWrapItemListener(ItemListener itemListener) {
+    	memoryWrapCheckBox.addItemListener(itemListener);
     }
     
 }
