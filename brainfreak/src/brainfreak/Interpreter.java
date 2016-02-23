@@ -180,7 +180,7 @@ class Interpreter {
     }
     
     private void triggerError(String error) {
-    	result = new StringBuilder("ERROR: " + error);
+    	result = new StringBuilder("ERROR: " + error + "\n");
     	exitProgram();
     }
     
