@@ -77,7 +77,7 @@ public class Controller {
 			    shiftIsPressed = true;
 			}
 			if (e.getKeyCode() == KeyEvent.VK_ENTER && shiftIsPressed) {
-			    launchInterpreter();
+			    gui.clickRunButton();
 			}
 	    }
 

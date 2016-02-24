@@ -162,6 +162,10 @@ public class GUI extends JFrame {
     	debugDisplayLabel.setText(text);
     }
     
+    public void clickRunButton() {
+    	runButton.doClick();
+    }
+    
     public void addRunButtonListener(ActionListener actionListener) {
     	runButton.addActionListener(actionListener);
     }
