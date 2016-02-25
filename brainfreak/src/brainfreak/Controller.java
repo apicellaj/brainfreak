@@ -65,6 +65,13 @@ public class Controller {
 		}
 	}
 	
+	class stopButtonActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Stop/interrupt thread
+		}
+	}
+	
 	class ReturnKeyKeyListener implements KeyListener {
 		private boolean shiftIsPressed = false;
 		

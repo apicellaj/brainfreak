@@ -30,6 +30,7 @@ public class GUI extends JFrame {
     private JTextArea resultArea;
     private JLabel debugDisplayLabel;
     private JButton runButton;
+    private JButton stopButton;
     private JButton cheatSheetButton;
     private JCheckBox extendedModeCheckBox;
     private JCheckBox debugModeCheckBox;
@@ -65,7 +66,7 @@ public class GUI extends JFrame {
 		memoryWrapCheckBox = new JCheckBox();
 		
 		runButton = new JButton("Run");
-		//**JButton haltButton = new JButton("Stop");
+		stopButton = new JButton("Stop");
 		
 		codeArea = new JTextArea(19,50);
 		inputArea = new JTextArea(2,50);
@@ -97,7 +98,7 @@ public class GUI extends JFrame {
         rightButtonPanel.add(sampleProgramsLabel);
         rightButtonPanel.add(sampleProgramsComboBox);
         rightButtonPanel.add(runButton);
-        //**rightButtonPanel.add(haltButton);
+        rightButtonPanel.add(stopButton);
         rightButtonPanel.add(cheatSheetButton);
         
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
@@ -168,6 +169,10 @@ public class GUI extends JFrame {
     
     public void addRunButtonListener(ActionListener actionListener) {
     	runButton.addActionListener(actionListener);
+    }
+    
+    public void addStopButtonListener(ActionListener actionListener) {
+    	stopButton.addActionListener(actionListener);
     }
     
     public void addReturnKeyListener(KeyListener keyListener) {
