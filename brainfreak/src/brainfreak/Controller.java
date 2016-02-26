@@ -2,24 +2,24 @@ package brainfreak;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import javax.swing.SwingWorker;
 
 public class Controller {
 	
 	final private GUI gui;
-	final private Interpreter interpreter;
+	//TODO: create a way to write intermediate results to JTextArea
 	
-	public Controller(final GUI gui, final Interpreter interpreter) {
+	private SwingWorker<Void, String> worker;
+	
+	public Controller(final GUI gui) {
 		this.gui = gui;
-		this.interpreter = interpreter;
 		
-		gui.addRunButtonListener(new runButonActionListener());
+		gui.addRunButtonListener(new RunButonActionListener());
 		gui.addReturnKeyListener(new ReturnKeyKeyListener());
 		gui.addCheatSheetButtonActionListener(new CheatSheetActionListener());
-		gui.addMemoryWrapItemListener(new MemoryWrapItemListener());
 	}
 	
 	public String getInputAreaText() {
@@ -47,9 +47,23 @@ public class Controller {
 		}
 		final String bfCode = getCodeAreaText().replaceAll(regexPattern, "").trim();
 		final String stdIn =  getInputAreaText().trim();
-		interpreter.setMemoryWrap(gui.hasMemoryWrap());
-		interpreter.run(bfCode, stdIn);
-		gui.setResultAreaText(interpreter.getResult());
+		final Interpreter interpreter = new Interpreter();
+		gui.addStopButtonListener(new StopButtonActionListener(interpreter));
+		//TODO: stdIn could contain letters and cause errors
+		
+		this.worker = new SwingWorker<Void, String>() {
+			@Override
+			protected Void doInBackground() throws Exception {
+				interpreter.setMemoryWrap(gui.hasMemoryWrap());
+				interpreter.run(bfCode, stdIn);
+				return null;
+			}
+			
+			protected void done() {
+				gui.setResultAreaText(interpreter.getResult());
+			}
+		};
+		worker.execute();
 		if (gui.isInDebugMode()) {
 			final String debugInformation = interpreter.getDebugInfo();
 			gui.setDebugDisplayLabel(debugInformation);
@@ -58,17 +72,24 @@ public class Controller {
 		}
 	}
 	
-	class runButonActionListener implements ActionListener {
+	class RunButonActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			launchInterpreter();
 		}
 	}
 	
-	class stopButtonActionListener implements ActionListener {
+	class StopButtonActionListener implements ActionListener {
+		private Interpreter interpreter;
+		
+		public StopButtonActionListener(Interpreter interpreter) {
+			this.interpreter = interpreter;
+		}
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Stop/interrupt thread
+			//worker.cancel(true);
+			interpreter.exitProgram();
 		}
 	}
 	
@@ -103,15 +124,7 @@ public class Controller {
 			cheat.addCheatSheetKeyListener(new CheatSheetKeyListener(cheat));
 		}
 	}
-	
-	class MemoryWrapItemListener implements ItemListener {
-		@Override
-		public void itemStateChanged(ItemEvent e) {
-			final boolean hasMemoryWrap = gui.hasMemoryWrap();
-			interpreter.setMemoryWrap(hasMemoryWrap);
-		}
-	}
-	
+
 	class CheatSheetKeyListener implements KeyListener {
 		AsciiCheatSheet cheat;
 		

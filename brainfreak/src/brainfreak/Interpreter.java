@@ -14,7 +14,7 @@ class Interpreter {
     private int codePosition;
     private int inputPosition;
     private boolean memoryWrap = false;
-    //private boolean stopProgram = false;
+    private boolean stopProgram = false;
     private String code;
     private StringBuilder result;
     private StringBuilder warnings;
@@ -31,12 +31,23 @@ class Interpreter {
     
     public void run(String simplifiedCode, String standardInput) {
     	variableInitialization();
+    	//dump();
     	code = simplifiedCode;
     	inputArray = createInputArray(standardInput);
 		checkForErrors();
 		decode(codePosition);
 		appendWarnings();
 		endTime   = System.currentTimeMillis();
+		codePosition = 0;
+    }
+    
+    public void dump() {
+    	System.out.println("memPos " + memoryPosition);
+    	System.out.println("codePos " + codePosition);
+    	System.out.println("inputPos " + inputPosition);
+    	System.out.println("noOfCalc " + numberOfCalculations);
+    	System.out.println("stopProgram " + stopProgram);
+    	System.out.println("result " + result);
     }
     
     private void variableInitialization() {
@@ -44,6 +55,7 @@ class Interpreter {
     	codePosition = 0;
     	inputPosition = 0;
     	numberOfCalculations = 0;
+    	stopProgram = false;
     	memoryArray = new int[MEMORY_SIZE];
     	result = new StringBuilder();
     	warnings = new StringBuilder();
@@ -76,16 +88,21 @@ class Interpreter {
     }
     
     private void decode(int start) {
-        for (codePosition = start; codePosition < code.length() && code.charAt(codePosition) != ']'; codePosition++) {
-            interpret(code.charAt(codePosition));
-            numberOfCalculations++;
-            if (numberOfCalculations == MAX_CALCULATIONS_ALLOWED) {
-            	triggerError("Exceeded maximum number of calculations: " + MAX_CALCULATIONS_ALLOWED);
+    	if (!stopProgram) {
+    		for (codePosition = start; codePosition < code.length() && code.charAt(codePosition) != ']'; codePosition++) {
+                interpret(code.charAt(codePosition));
+                numberOfCalculations++;
+                if (numberOfCalculations == MAX_CALCULATIONS_ALLOWED) {
+                	triggerError("Exceeded maximum number of calculations: " + 
+                		NumberFormat.getInstance().format(MAX_CALCULATIONS_ALLOWED));
+                }
             }
-        }
+    	}
     }
     
     private void interpret(char c) {
+    	//if (numberOfCalculations % 100000000 == 0) System.out.println(numberOfCalculations);
+    	
     	final char value;
     	switch (c) {
 	    	case ';' : 	memoryArray[memoryPosition] = inputArray[inputPosition++];
@@ -188,8 +205,9 @@ class Interpreter {
     	result.append(warnings);
     }
     
-    private void exitProgram() {
-    	codePosition = code.length();
+    public void exitProgram() {
+    	stopProgram = true;
+    	codePosition = 0;
     }
     
     public String getDebugInfo() {

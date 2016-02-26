@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
@@ -182,9 +181,5 @@ public class GUI extends JFrame {
     public void addCheatSheetButtonActionListener(ActionListener actionListener) {
     	cheatSheetButton.addActionListener(actionListener);
     }
-    
-    public void addMemoryWrapItemListener(ItemListener itemListener) {
-    	memoryWrapCheckBox.addItemListener(itemListener);
-    }
-    
+
 }

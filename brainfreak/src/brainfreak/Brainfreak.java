@@ -9,8 +9,7 @@ public class Brainfreak {
     	SwingUtilities.invokeLater(new Runnable() {
     	    public void run() {
     	    	final GUI gui = new GUI();
-    			final Interpreter interpreter = new Interpreter();
-    			final Controller controller = new Controller(gui, interpreter);
+    			final Controller controller = new Controller(gui);
     	    }
     	});
 		
