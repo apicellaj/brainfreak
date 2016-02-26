@@ -2,24 +2,24 @@ package brainfreak;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import javax.swing.SwingWorker;
 
 public class Controller {
 	
 	final private GUI gui;
-	final private Interpreter interpreter;
+	//TODO: create a way to write intermediate results to JTextArea
 	
-	public Controller(final GUI gui, final Interpreter interpreter) {
+	private SwingWorker<Void, String> worker;
+	
+	public Controller(final GUI gui) {
 		this.gui = gui;
-		this.interpreter = interpreter;
 		
-		gui.addRunButtonListener(new runButonActionListener());
+		gui.addRunButtonListener(new RunButonActionListener());
 		gui.addReturnKeyListener(new ReturnKeyKeyListener());
 		gui.addCheatSheetButtonActionListener(new CheatSheetActionListener());
-		gui.addMemoryWrapItemListener(new MemoryWrapItemListener());
 	}
 	
 	public String getInputAreaText() {
@@ -39,29 +39,50 @@ public class Controller {
 	}
 	
 	private void launchInterpreter() {
-		final String regexPattern;
-		if (gui.hasExtendedSupport()) {
-			regexPattern = "[^\\>\\<\\+\\-\\.\\,\\:\\;\\[\\]]";
-		} else {
-			regexPattern = "[^\\>\\<\\+\\-\\.\\,\\[\\]]";
-		}
-		final String bfCode = getCodeAreaText().replaceAll(regexPattern, "").trim();
-		final String stdIn =  getInputAreaText().trim();
-		interpreter.setMemoryWrap(gui.hasMemoryWrap());
-		interpreter.run(bfCode, stdIn);
-		gui.setResultAreaText(interpreter.getResult());
-		if (gui.isInDebugMode()) {
-			final String debugInformation = interpreter.getDebugInfo();
-			gui.setDebugDisplayLabel(debugInformation);
-		} else {
-			gui.setDebugDisplayLabel(" ");
-		}
+		final String regexPattern = (gui.hasExtendedSupport()) ? 
+				"[^\\>\\<\\+\\-\\.\\,\\:\\;\\[\\]]" : 
+				"[^\\>\\<\\+\\-\\.\\,\\[\\]]";
+		final String bfCode = getCodeAreaText().replaceAll(regexPattern, "");
+		final String stdIn =  getInputAreaText().replaceAll("[^0-9\\s]", "");
+		Interpreter interpreter = new Interpreter();
+		gui.addStopButtonListener(new StopButtonActionListener(interpreter));
+		
+		this.worker = new SwingWorker<Void, String>() {
+			@Override
+			protected Void doInBackground() throws Exception {
+				interpreter.setMemoryWrap(gui.hasMemoryWrap());
+				interpreter.run(bfCode, stdIn);
+				return null;
+			}
+			
+			protected void done() {
+				final String debugInformation = gui.isInDebugMode() ? interpreter.getDebugInfo() : "";
+				gui.setResultAreaText(interpreter.getResult());
+				gui.setDebugDisplayLabel(debugInformation);
+			}
+		};
+		
+		worker.execute();
 	}
 	
-	class runButonActionListener implements ActionListener {
+	class RunButonActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			launchInterpreter();
+		}
+	}
+	
+	class StopButtonActionListener implements ActionListener {
+		private Interpreter interpreter;
+		
+		public StopButtonActionListener(Interpreter interpreter) {
+			this.interpreter = interpreter;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//worker.cancel(true);
+			interpreter.exitProgram();
 		}
 	}
 	
@@ -77,7 +98,7 @@ public class Controller {
 			    shiftIsPressed = true;
 			}
 			if (e.getKeyCode() == KeyEvent.VK_ENTER && shiftIsPressed) {
-			    launchInterpreter();
+			    gui.clickRunButton();
 			}
 	    }
 
@@ -96,15 +117,7 @@ public class Controller {
 			cheat.addCheatSheetKeyListener(new CheatSheetKeyListener(cheat));
 		}
 	}
-	
-	class MemoryWrapItemListener implements ItemListener {
-		@Override
-		public void itemStateChanged(ItemEvent e) {
-			final boolean hasMemoryWrap = gui.hasMemoryWrap();
-			interpreter.setMemoryWrap(hasMemoryWrap);
-		}
-	}
-	
+
 	class CheatSheetKeyListener implements KeyListener {
 		AsciiCheatSheet cheat;
 		

@@ -7,47 +7,35 @@ class Interpreter {
     
     //TODO: maybe create an enum for the different array bit states
     //TODO: maybe convert BF string with run length encoding (RLE)* for optimization
-    //TODO: find a more efficient way to write to resultArea
-    //TODO: allow operation to be cancelled with a button (halt button)
-    
-    private int memoryPosition;
-    private int codePosition;
-    private int inputPosition;
-    private boolean memoryWrap = false;
-    //private boolean stopProgram = false;
+
     private String code;
-    private StringBuilder result;
-    private StringBuilder warnings;
-    private long numberOfCalculations;
     private long startTime;
     private long endTime;
+    private int[] inputArray;
+    
+    private int memoryPosition = 0;
+    private int codePosition = 0;
+    private int inputPosition = 0;
+    private boolean hasMemoryWrapEnabled = false;
+    private boolean stopProgram = false;
+    private StringBuilder result = new StringBuilder();
+    private StringBuilder warnings = new StringBuilder();
+    private long numberOfCalculations = 0;
     private static final long MAX_CALCULATIONS_ALLOWED = Integer.MAX_VALUE;
     private static final int MEMORY_SIZE = 30000;
-    private int[] inputArray;
-    private int[] memoryArray;
+    private int[] memoryArray = new int[MEMORY_SIZE];
     
     public Interpreter() {
     }
     
     public void run(String simplifiedCode, String standardInput) {
-    	variableInitialization();
     	code = simplifiedCode;
     	inputArray = createInputArray(standardInput);
 		checkForErrors();
+		startTime = System.currentTimeMillis();
 		decode(codePosition);
 		appendWarnings();
 		endTime   = System.currentTimeMillis();
-    }
-    
-    private void variableInitialization() {
-    	memoryPosition = 0;
-    	codePosition = 0;
-    	inputPosition = 0;
-    	numberOfCalculations = 0;
-    	memoryArray = new int[MEMORY_SIZE];
-    	result = new StringBuilder();
-    	warnings = new StringBuilder();
-    	startTime = System.currentTimeMillis();
     }
     
     private void checkForErrors() {
@@ -76,13 +64,16 @@ class Interpreter {
     }
     
     private void decode(int start) {
-        for (codePosition = start; codePosition < code.length() && code.charAt(codePosition) != ']'; codePosition++) {
-            interpret(code.charAt(codePosition));
-            numberOfCalculations++;
-            if (numberOfCalculations == MAX_CALCULATIONS_ALLOWED) {
-            	triggerError("Exceeded maximum number of calculations: " + MAX_CALCULATIONS_ALLOWED);
+    	if (!stopProgram) {
+    		for (codePosition = start; codePosition < code.length() && code.charAt(codePosition) != ']'; codePosition++) {
+                interpret(code.charAt(codePosition));
+                numberOfCalculations++;
+                if (numberOfCalculations == MAX_CALCULATIONS_ALLOWED) {
+                	triggerError("Exceeded maximum number of calculations: " + 
+                		NumberFormat.getInstance().format(MAX_CALCULATIONS_ALLOWED));
+                }
             }
-        }
+    	}
     }
     
     private void interpret(char c) {
@@ -111,7 +102,7 @@ class Interpreter {
 	    	case '[' :	enterLoop(codePosition+1);
 	    				break;
     	}
-    	if (memoryWrap) {
+    	if (hasMemoryWrapEnabled) {
     		memoryWrap();
     	} else {
     		if (memoryPosition < 0) {
@@ -188,8 +179,8 @@ class Interpreter {
     	result.append(warnings);
     }
     
-    private void exitProgram() {
-    	codePosition = code.length();
+    public void exitProgram() {
+    	stopProgram = true;
     }
     
     public String getDebugInfo() {
@@ -198,6 +189,6 @@ class Interpreter {
     }
     
     public void setMemoryWrap(boolean enableMemoryWrap) {
-    	memoryWrap = enableMemoryWrap;
+    	hasMemoryWrapEnabled = enableMemoryWrap;
     }
 }
