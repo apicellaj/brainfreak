@@ -56,14 +56,13 @@ public class Controller {
 			}
 			
 			protected void done() {
+				final String debugInformation = gui.isInDebugMode() ? interpreter.getDebugInfo() : "";
 				gui.setResultAreaText(interpreter.getResult());
+				gui.setDebugDisplayLabel(debugInformation);
 			}
 		};
 		
 		worker.execute();
-		
-		final String debugInformation = gui.isInDebugMode() ? interpreter.getDebugInfo() : "";
-		gui.setDebugDisplayLabel(debugInformation);
 	}
 	
 	class RunButonActionListener implements ActionListener {
