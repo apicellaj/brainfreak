@@ -7,8 +7,6 @@ class Interpreter {
     
     //TODO: maybe create an enum for the different array bit states
     //TODO: maybe convert BF string with run length encoding (RLE)* for optimization
-    //TODO: find a more efficient way to write to resultArea
-    //TODO: allow operation to be cancelled with a button (halt button)
 
     private String code;
     private long startTime;
