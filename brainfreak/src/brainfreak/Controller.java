@@ -39,17 +39,13 @@ public class Controller {
 	}
 	
 	private void launchInterpreter() {
-		final String regexPattern;
-		if (gui.hasExtendedSupport()) {
-			regexPattern = "[^\\>\\<\\+\\-\\.\\,\\:\\;\\[\\]]";
-		} else {
-			regexPattern = "[^\\>\\<\\+\\-\\.\\,\\[\\]]";
-		}
-		final String bfCode = getCodeAreaText().replaceAll(regexPattern, "").trim();
-		final String stdIn =  getInputAreaText().trim();
-		final Interpreter interpreter = new Interpreter();
+		final String regexPattern = (gui.hasExtendedSupport()) ? 
+				"[^\\>\\<\\+\\-\\.\\,\\:\\;\\[\\]]" : 
+				"[^\\>\\<\\+\\-\\.\\,\\[\\]]";
+		final String bfCode = getCodeAreaText().replaceAll(regexPattern, "");
+		final String stdIn =  getInputAreaText().replaceAll("[^0-9\\s]", "");
+		Interpreter interpreter = new Interpreter();
 		gui.addStopButtonListener(new StopButtonActionListener(interpreter));
-		//TODO: stdIn could contain letters and cause errors
 		
 		this.worker = new SwingWorker<Void, String>() {
 			@Override
@@ -63,13 +59,11 @@ public class Controller {
 				gui.setResultAreaText(interpreter.getResult());
 			}
 		};
+		
 		worker.execute();
-		if (gui.isInDebugMode()) {
-			final String debugInformation = interpreter.getDebugInfo();
-			gui.setDebugDisplayLabel(debugInformation);
-		} else {
-			gui.setDebugDisplayLabel(" ");
-		}
+		
+		final String debugInformation = gui.isInDebugMode() ? interpreter.getDebugInfo() : "";
+		gui.setDebugDisplayLabel(debugInformation);
 	}
 	
 	class RunButonActionListener implements ActionListener {
