@@ -17,7 +17,7 @@ public class ExampleList extends JComboBox<String> {
 	final JComboBox<String> comboBox;
 
 	ExampleList(GUI gui) {
-		String[] sampleProgramNames = {"None", "Hello World!", "Square Numbers", "Fibonacci"};
+		String[] sampleProgramNames = {"None", "Hello World!", "Square Numbers", "Fibonacci", "Infinite Factorial", "Infinite Powers of Two"};
 		comboBox = new JComboBox<>(sampleProgramNames);
 		this.gui = gui;
 	}
@@ -54,6 +54,16 @@ public class ExampleList extends JComboBox<String> {
 				"<<<<<<<<<<[>>>+>+<<<<-]>>>>[<<<<+>>>>-]<-[>>.>.<<<\n" + 
 				"[-]]<<[>>+>+<<<-]>>>[<<<+>>>-]<<[<+>-]>[<+>-]<<<-]";
 		
+		private final String INFINITE_FACTORIAL =
+				">++++++++++>>>+>+[>>>+[-[<<<<<[+<<<<<]>>[[-]>[<<+>+>-]<[>+<-]<[>+<-[>+<-[>\n" + 
+				"+<-[>+<-[>+<-[>+<-[>+<-[>+<-[>+<-[>[-]>>>>+>+<<<<<<-[>+<-]]]]]]]]]]]>[<+>-\n" + 
+				"]+>>>>>]<<<<<[<<<<<]>>>>>>>[>>>>>]++[-<<<<<]>>>>>>-]+>>>>>]<[>++<-]<<<<[<[\n" + 
+				">+<-]<<<<]>>[->[-]++++++[<++++++++>-]>>>>]<<<<<[<[>+>+<<-]>.<<<<<]>.>>>>]";
+		
+		private final String INFINITE_POWERS_OF_TWO =
+				">++++++++++>>+<+[[+++++[>++++++++<-]>.<++++++[>--------<-]+<<]>.>[->" +
+				"[<++>-[<++>-[<++>-[<++>-[<-------->>[-]++<-[<++>-]]]]]]<[>+<-]+>>]<<]";
+		
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			
@@ -67,6 +77,9 @@ public class ExampleList extends JComboBox<String> {
 					break;
 				case "Fibonacci" : fibonacci();
 					break;
+				case "Infinite Factorial" : infiniteFactorial();
+					break;
+				case "Infinite Powers of Two" : infinitePowersOfTwo();
 				}
 			}
 			
@@ -86,6 +99,14 @@ public class ExampleList extends JComboBox<String> {
 		
 		private void fibonacci() {
 			gui.setCodeText(FIBONACCI);
+		}
+		
+		private void infiniteFactorial() {
+			gui.setCodeText(INFINITE_FACTORIAL);
+		}
+		
+		private void infinitePowersOfTwo() {
+			gui.setCodeText(INFINITE_POWERS_OF_TWO);
 		}
 		
 	}
