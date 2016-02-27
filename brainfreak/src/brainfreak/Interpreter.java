@@ -1,16 +1,19 @@
 package brainfreak;
 
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Stack;
 
-class Interpreter {
+import javax.swing.SwingWorker;
+
+class Interpreter extends SwingWorker<Void, String>{
     
     //TODO: maybe create an enum for the different array bit states
     //TODO: maybe convert BF string with run length encoding (RLE)* for optimization
 
     private String code;
+    private Controller controller;
     private long startTime;
-    private long endTime;
     private int[] inputArray;
     
     private int memoryPosition = 0;
@@ -21,21 +24,36 @@ class Interpreter {
     private StringBuilder result = new StringBuilder();
     private StringBuilder warnings = new StringBuilder();
     private long numberOfCalculations = 0;
-    private static final long MAX_CALCULATIONS_ALLOWED = Integer.MAX_VALUE;
+    private static final long MAX_CALCULATIONS_ALLOWED = Long.MAX_VALUE;
     private static final int MEMORY_SIZE = 30000;
     private int[] memoryArray = new int[MEMORY_SIZE];
     
-    public Interpreter() {
-    }
-    
-    public void run(String simplifiedCode, String standardInput) {
+    public Interpreter(String simplifiedCode, String standardInput, boolean hasMemoryWrap, Controller controller) {
     	code = simplifiedCode;
     	inputArray = createInputArray(standardInput);
-		checkForErrors();
+    	hasMemoryWrapEnabled = hasMemoryWrap;
+    	this.controller = controller;
+    }
+    
+    @Override
+	protected Void doInBackground() throws Exception {
+    	checkForErrors();
 		startTime = System.currentTimeMillis();
 		decode(codePosition);
+		return null;
+	}
+    
+    @Override
+    protected void done() {
 		appendWarnings();
-		endTime   = System.currentTimeMillis();
+    	final String debugInformation = controller.isInDebugMode() ? getDebugInfo() : "";
+		controller.setResultAreaText(getResult());
+		controller.setDebugDisplayLabel(debugInformation);
+    }
+    
+    @Override
+    protected void process(List<String> chunks) {
+    	controller.setResultAreaText(chunks.get(chunks.size()-1));
     }
     
     private void checkForErrors() {
@@ -77,6 +95,7 @@ class Interpreter {
     }
     
     private void interpret(char c) {
+    	if (numberOfCalculations % 100 == 0) publish(getResult());
     	final char value;
     	switch (c) {
 	    	case ';' : 	memoryArray[memoryPosition] = inputArray[inputPosition++];
@@ -86,7 +105,7 @@ class Interpreter {
 	    	case ',' :	value = (char) (inputArray[inputPosition++]+48);
 				        memoryArray[memoryPosition] = (int) value;
 				        break;
-	    	case '.' : 	if (memoryArray[memoryPosition] >= 10) {
+	    	case '.' : 	if (memoryArray[memoryPosition] >= 0) {
 				    		value = (char) memoryArray[memoryPosition];
 				            result.append(value);
 		            	}
@@ -184,11 +203,9 @@ class Interpreter {
     }
     
     public String getDebugInfo() {
+    	final long endTime = System.currentTimeMillis();
     	final long totalTime = endTime - startTime;
     	return "Executed " + NumberFormat.getInstance().format(numberOfCalculations) + " commands in " + totalTime + " ms.";
     }
     
-    public void setMemoryWrap(boolean enableMemoryWrap) {
-    	hasMemoryWrapEnabled = enableMemoryWrap;
-    }
 }
