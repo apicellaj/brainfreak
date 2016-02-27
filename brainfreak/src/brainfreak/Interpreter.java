@@ -38,6 +38,7 @@ class Interpreter extends SwingWorker<Void, String>{
     @Override
 	protected Void doInBackground() throws Exception {
     	checkForErrors();
+    	controller.setDebugDisplayLabel("");
 		startTime = System.currentTimeMillis();
 		decode(codePosition);
 		return null;
