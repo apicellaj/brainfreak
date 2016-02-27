@@ -205,7 +205,8 @@ class Interpreter extends SwingWorker<Void, String>{
     public String getDebugInfo() {
     	final long endTime = System.currentTimeMillis();
     	final long totalTime = endTime - startTime;
-    	return "Executed " + NumberFormat.getInstance().format(numberOfCalculations) + " commands in " + totalTime + " ms.";
+    	return "Executed " + NumberFormat.getInstance().format(numberOfCalculations) + 
+    			" commands in " + NumberFormat.getInstance().format(totalTime) + " ms.";
     }
     
 }
