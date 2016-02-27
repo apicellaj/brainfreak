@@ -5,14 +5,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.SwingWorker;
-
 public class Controller {
 	
 	final private GUI gui;
-	//TODO: create a way to write intermediate results to JTextArea
-	
-	private SwingWorker<Void, String> worker;
 	
 	public Controller(final GUI gui) {
 		this.gui = gui;
@@ -37,6 +32,14 @@ public class Controller {
 	public void setResultAreaText(String text) {
 		gui.setResultAreaText(text);
 	}
+
+	public void setDebugDisplayLabel(String debugInformation) {
+		gui.setDebugDisplayLabel(debugInformation);
+	}
+	
+	public boolean isInDebugMode() {
+		return gui.isInDebugMode();
+	}
 	
 	private void launchInterpreter() {
 		final String regexPattern = (gui.hasExtendedSupport()) ? 
@@ -44,25 +47,11 @@ public class Controller {
 				"[^\\>\\<\\+\\-\\.\\,\\[\\]]";
 		final String bfCode = getCodeAreaText().replaceAll(regexPattern, "");
 		final String stdIn =  getInputAreaText().replaceAll("[^0-9\\s]", "");
-		Interpreter interpreter = new Interpreter();
+		final boolean hasMemoryWrap = gui.hasMemoryWrap();
+		Interpreter interpreter = new Interpreter(bfCode, stdIn, hasMemoryWrap, this);
 		gui.addStopButtonListener(new StopButtonActionListener(interpreter));
 		
-		this.worker = new SwingWorker<Void, String>() {
-			@Override
-			protected Void doInBackground() throws Exception {
-				interpreter.setMemoryWrap(gui.hasMemoryWrap());
-				interpreter.run(bfCode, stdIn);
-				return null;
-			}
-			
-			protected void done() {
-				final String debugInformation = gui.isInDebugMode() ? interpreter.getDebugInfo() : "";
-				gui.setResultAreaText(interpreter.getResult());
-				gui.setDebugDisplayLabel(debugInformation);
-			}
-		};
-		
-		worker.execute();
+		interpreter.execute();
 	}
 	
 	class RunButonActionListener implements ActionListener {
@@ -81,7 +70,7 @@ public class Controller {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//worker.cancel(true);
+			interpreter.cancel(true);
 			interpreter.exitProgram();
 		}
 	}
