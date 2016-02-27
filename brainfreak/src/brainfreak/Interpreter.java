@@ -96,7 +96,7 @@ class Interpreter extends SwingWorker<Void, String>{
     }
     
     private void interpret(char c) {
-    	if (numberOfCalculations % 100 == 0) publish(getResult());
+    	if (numberOfCalculations % 1000000 == 0) publish(getResult());
     	final char value;
     	switch (c) {
 	    	case ';' : 	memoryArray[memoryPosition] = inputArray[inputPosition++];
@@ -142,6 +142,11 @@ class Interpreter extends SwingWorker<Void, String>{
     }
     
     private void enterLoop(int startOfLoop) {
+    	if (codePosition < code.length()-2 && code.substring(codePosition, codePosition+3).equals("[-]")) {
+			memoryArray[memoryPosition] = 0;
+			codePosition += 2;
+			return;
+		}
         int loopExit = loopExit(startOfLoop);
         while(memoryArray[memoryPosition] != 0) {
         	decode(startOfLoop);
