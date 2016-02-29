@@ -1,4 +1,4 @@
-package brainfreak;
+package main.java.brainfreak;
 
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;

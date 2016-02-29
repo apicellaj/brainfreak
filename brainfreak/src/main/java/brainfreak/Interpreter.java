@@ -1,4 +1,4 @@
-package brainfreak;
+package main.java.brainfreak;
 
 import java.text.NumberFormat;
 import java.util.List;
