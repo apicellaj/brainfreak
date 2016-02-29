@@ -40,10 +40,8 @@ public class GUI extends JFrame {
     }
     
     private void createAndShowGui() {
-		//TODO: Add unit testing
-    	//TODO: maybe make a string pool for localization, probably not necessary
-    	//TODO: future testing here ->  http://www.hevanet.com/cristofd/brainfuck/tests.b
-    	//TODO: add ability to resize frame, enums for various preset lengths
+  	//TODO: maybe make a string pool for localization, probably not necessary
+  	//TODO: add ability to resize frame, enums for various preset lengths
     	
 		JFrame frame = new JFrame();
 		
