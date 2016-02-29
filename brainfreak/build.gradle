@@ -1,0 +1,17 @@
+apply plugin: "java"
+
+jar {
+    baseName = "Brainfreak Interpreter"
+    //version = "0.1.0"
+    manifest {
+        attributes "Main-Class": "main.java.brainfreak.Brainfreak"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
