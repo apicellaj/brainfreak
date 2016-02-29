@@ -6,7 +6,7 @@ import java.util.Stack;
 
 import javax.swing.SwingWorker;
 
-class Interpreter extends SwingWorker<Void, String>{
+public class Interpreter extends SwingWorker<Void, String>{
     
     //TODO: maybe create an enum for the different array bit states
     //TODO: maybe convert BF string with run length encoding (RLE)* for optimization
