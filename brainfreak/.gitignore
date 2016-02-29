@@ -4,3 +4,18 @@
 /org.*
 /.settings
 /.project
+.gradle
+.m2
+
+# Build output directies
+/target
+*/target
+/build
+*/build
+
+# Eclipse specific files/directories
+.classpath
+.project
+.settings
+.metadata
+
