@@ -1,4 +1,4 @@
-package brainfreak;
+package main.java.brainfreak;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.Stack;
 
 import javax.swing.SwingWorker;
 
-class Interpreter extends SwingWorker<Void, String>{
+public class Interpreter extends SwingWorker<Void, String>{
     
     //TODO: maybe create an enum for the different array bit states
     //TODO: maybe convert BF string with run length encoding (RLE)* for optimization
@@ -38,7 +38,9 @@ class Interpreter extends SwingWorker<Void, String>{
     @Override
 	protected Void doInBackground() throws Exception {
     	checkForErrors();
-    	controller.setDebugDisplayLabel("");
+    	if (controller != null) {
+    		controller.setDebugDisplayLabel("");
+    	}
 		startTime = System.currentTimeMillis();
 		decode(codePosition);
 		return null;
@@ -47,14 +49,19 @@ class Interpreter extends SwingWorker<Void, String>{
     @Override
     protected void done() {
 		appendWarnings();
-    	final String debugInformation = controller.isInDebugMode() ? getDebugInfo() : "";
-		controller.setResultAreaText(getResult());
-		controller.setDebugDisplayLabel(debugInformation);
+		if (controller != null) {
+			final String debugInformation = controller.isInDebugMode() ? getDebugInfo() : "";
+			controller.setResultAreaText(getResult());
+			controller.setDebugDisplayLabel(debugInformation);
+		}
+    	
     }
     
     @Override
     protected void process(List<String> chunks) {
-    	controller.setResultAreaText(chunks.get(chunks.size()-1));
+    	if (controller != null) {
+    		controller.setResultAreaText(chunks.get(chunks.size()-1));
+    	}
     }
     
     private void checkForErrors() {
@@ -96,7 +103,9 @@ class Interpreter extends SwingWorker<Void, String>{
     }
     
     private void interpret(char c) {
-    	if (numberOfCalculations % 1000000 == 0) publish(getResult());
+    	if (numberOfCalculations % 1000000 == 0) {
+    		publish(getResult());
+    	}
     	final char value;
     	switch (c) {
 	    	case ';' : 	memoryArray[memoryPosition] = inputArray[inputPosition++];

@@ -1,4 +1,4 @@
-package brainfreak;
+package main.java.brainfreak;
 
 import javax.swing.SwingUtilities;
 

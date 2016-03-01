@@ -1,4 +1,4 @@
-package brainfreak;
+package main.java.brainfreak;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

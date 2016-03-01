@@ -1,9 +1,9 @@
-/bin/
-/.classpath
-/.DS_Store
-/org.*
-/.settings
-/.project
+bin/
+.classpath
+.DS_Store
+org.*
+.settings
+.project
 .gradle
 .m2
 
