@@ -48,7 +48,6 @@ public class Interpreter extends SwingWorker<Void, String>{
     
     @Override
     protected void done() {
-		appendWarnings();
 		if (controller != null) {
 			final String debugInformation = controller.isInDebugMode() ? getDebugInfo() : "";
 			controller.setResultAreaText(getResult());
@@ -74,7 +73,8 @@ public class Interpreter extends SwingWorker<Void, String>{
     }
     
     public String getResult() {
-    	return result.toString();
+    	final String output = result.toString() + appendWarnings();
+    	return output;
     }
     
     private int[] createInputArray(String stdIn) {
@@ -209,8 +209,8 @@ public class Interpreter extends SwingWorker<Void, String>{
     	exitProgram();
     }
     
-    private void appendWarnings() {
-    	result.append(warnings);
+    private String appendWarnings() {
+    	return warnings.toString();
     }
     
     public void exitProgram() {
