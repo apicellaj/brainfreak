@@ -8,30 +8,28 @@ import javax.swing.SwingWorker;
 
 public class Interpreter extends SwingWorker<Void, String>{
     
-    //TODO: maybe create an enum for the different array bit states
     //TODO: maybe convert BF string with run length encoding (RLE)* for optimization
+	//TODO: change constructor, create methods for setting memory wrap, number of cells, code input and standard input
 
     private String code;
     private Controller controller;
     private long startTime;
     private int[] inputArray;
     
-    private int memoryPosition = 0;
+    private MemoryTape memoryTape;
     private int codePosition = 0;
     private int inputPosition = 0;
-    private boolean hasMemoryWrapEnabled = false;
     private boolean stopProgram = false;
     private StringBuilder result = new StringBuilder();
     private StringBuilder warnings = new StringBuilder();
     private long numberOfCalculations = 0;
     private static final long MAX_CALCULATIONS_ALLOWED = Long.MAX_VALUE;
     private static final int MEMORY_SIZE = 30000;
-    private int[] memoryArray = new int[MEMORY_SIZE];
     
     public Interpreter(String simplifiedCode, String standardInput, boolean hasMemoryWrap, Controller controller) {
     	code = simplifiedCode;
     	inputArray = createInputArray(standardInput);
-    	hasMemoryWrapEnabled = hasMemoryWrap;
+    	memoryTape = new MemoryTape(MEMORY_SIZE, hasMemoryWrap);
     	this.controller = controller;
     }
     
@@ -53,7 +51,6 @@ public class Interpreter extends SwingWorker<Void, String>{
 			controller.setResultAreaText(getResult());
 			controller.setDebugDisplayLabel(debugInformation);
 		}
-    	
     }
     
     @Override
@@ -108,56 +105,49 @@ public class Interpreter extends SwingWorker<Void, String>{
     	}
     	final char value;
     	switch (c) {
-	    	case ';' : 	memoryArray[memoryPosition] = inputArray[inputPosition++];
+	    	case ';' : 	memoryTape.setValue((byte) inputArray[inputPosition++]);
 	        			break;
-	    	case ':' :	result.append(memoryArray[memoryPosition]).append(' ');
+	    	case ':' :	result.append(memoryTape.getValue()).append(' ');
 	    				break;
 	    	case ',' :	value = (char) (inputArray[inputPosition++]+48);
-				        memoryArray[memoryPosition] = (int) value;
+				        memoryTape.setValue((byte) value);
 				        break;
-	    	case '.' : 	if (memoryArray[memoryPosition] >= 0) {
-				    		value = (char) memoryArray[memoryPosition];
+	    	case '.' : 	if (memoryTape.getValue() >= 0) {
+				    		value = (char) memoryTape.getValue();
 				            result.append(value);
 		            	}
 	    				break;
-	    	case '>' : 	memoryPosition++;
+	    	case '>' : 	memoryTape.incrementPosition();
+	    				checkMemory();
 	    				break;
-	    	case '<' : 	memoryPosition--;
+	    	case '<' : 	memoryTape.decrementPosition();
+	    				checkMemory();
 	    				break;
-	    	case '+' :	memoryArray[memoryPosition]++;
+	    	case '+' :	memoryTape.incrementMemory();
 	    				break;
-	    	case '-' :	memoryArray[memoryPosition]--;
+	    	case '-' :	memoryTape.decrementMemory();
 	    				break;
 	    	case '[' :	enterLoop(codePosition+1);
 	    				break;
     	}
-    	if (hasMemoryWrapEnabled) {
-    		memoryWrap();
-    	} else {
-    		if (memoryPosition < 0) {
-    			triggerError("Memory Underflow at character " + codePosition);
-    		} else if (memoryPosition > MEMORY_SIZE) {
-    			triggerError("Memory Overflow at character " + codePosition);
-    		}
-    	}
     }
     
-    private void memoryWrap() {
-    	if (memoryPosition >= MEMORY_SIZE) {
-    		memoryPosition %= MEMORY_SIZE;
-        } else if (memoryPosition < 0) {
-        	memoryPosition += MEMORY_SIZE;
-        }
+    private void checkMemory() {
+    	if (memoryTape.getMemoryPosition() < 0) {
+			triggerError("Memory Underflow at character " + codePosition);
+		} else if (memoryTape.getMemoryPosition() > MEMORY_SIZE) {
+			triggerError("Memory Overflow at character " + codePosition);
+		}
     }
     
     private void enterLoop(int startOfLoop) {
     	if (codePosition < code.length()-2 && code.substring(codePosition, codePosition+3).equals("[-]")) {
-			memoryArray[memoryPosition] = 0;
+			memoryTape.setValue((byte) 0);
 			codePosition += 2;
 			return;
 		}
         int loopExit = loopExit(startOfLoop);
-        while(memoryArray[memoryPosition] != 0) {
+        while(memoryTape.getValue() != 0) {
         	decode(startOfLoop);
         }
         codePosition = loopExit;
