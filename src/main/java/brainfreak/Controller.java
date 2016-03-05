@@ -42,15 +42,17 @@ public class Controller {
 	}
 	
 	private void launchInterpreter() {
-		final String regexPattern = (gui.hasExtendedSupport()) ? 
-				"[^\\>\\<\\+\\-\\.\\,\\:\\;\\[\\]]" : 
-				"[^\\>\\<\\+\\-\\.\\,\\[\\]]";
-		final String bfCode = getCodeAreaText().replaceAll(regexPattern, "");
+		final String bfCode = getCodeAreaText();
 		final String stdIn =  getInputAreaText().replaceAll("[^0-9\\s]", "");
+		//TODO: have input field update to reflect regex replacement
 		final boolean hasMemoryWrap = gui.hasMemoryWrap();
-		Interpreter interpreter = new Interpreter(bfCode, stdIn, hasMemoryWrap, this);
+		final boolean hasExtendedMode = gui.hasExtendedSupport();
+		Interpreter interpreter = new Interpreter(this);
+		interpreter.setCode(bfCode);
+		interpreter.setInput(stdIn);
+		interpreter.setMemoryWrap(hasMemoryWrap);
+		interpreter.setExtendedMode(hasExtendedMode);
 		gui.addStopButtonListener(new StopButtonActionListener(interpreter));
-		
 		interpreter.execute();
 	}
 	
