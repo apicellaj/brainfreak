@@ -13,9 +13,6 @@ import main.java.brainfreak.Interpreter;
 public class InterpreterTest {
 
 	private Interpreter interpreter;
-	
-	private final static boolean MEMORY_WRAP_OFF = false;
-	private final static boolean MEMORY_WRAP_ON = true;
 
 	private String badBrackets;
 	private String unusedInput;
@@ -61,7 +58,6 @@ public class InterpreterTest {
 	
 	@Test
 	public void testInsufficientInput() {
-		//interpreter = new Interpreter(",", NO_STD_IN, MEMORY_WRAP_OFF, null);
 		interpreter = new Interpreter(null);
 		interpreter.setCode(",");
 		interpreter.run();
@@ -80,6 +76,7 @@ public class InterpreterTest {
 
 	@Test
 	public void testMemoryWrapOn() {
+		interpreter = new Interpreter(null);
 		interpreter.setCode(memoryWrapUnderflowTest);
 		interpreter.setMemoryWrap(true);
 		interpreter.run();
