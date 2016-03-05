@@ -5,10 +5,13 @@ public class MemoryTape {
 	private byte[] memoryTape;
 	
 	private int memoryPosition = 0;
-	private boolean hasMemoryWrap;
+	private boolean hasMemoryWrap = false;
 	
-	public MemoryTape(int numberOfCells, boolean hasMemoryWrap) {
+	public MemoryTape(int numberOfCells) {
 		memoryTape = new byte[numberOfCells];
+	}
+	
+	public void setMemoryWrap(boolean hasMemoryWrap) {
 		this.hasMemoryWrap = hasMemoryWrap;
 	}
 	
