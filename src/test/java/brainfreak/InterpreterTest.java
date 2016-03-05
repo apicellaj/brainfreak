@@ -16,11 +16,10 @@ public class InterpreterTest {
 	
 	private final static boolean MEMORY_WRAP_OFF = false;
 	private final static boolean MEMORY_WRAP_ON = true;
-	private final static String NO_STD_IN = "";
 
 	private String badBrackets;
 	private String unusedInput;
-	private String memoryWrap;
+	private String memoryWrapUnderflowTest;
 	private String helloWorld;
 
 	@BeforeClass
@@ -35,7 +34,7 @@ public class InterpreterTest {
 	public void setUp() throws Exception {
 		badBrackets = "][]";
 		unusedInput = "1 2 3 4";
-		memoryWrap = "<++++[-<++++++++>]<+.";
+		memoryWrapUnderflowTest = "<++++[-<++++++++>]<+.";
 		helloWorld = ">++++++++[-<+++++++++>]<.>>+>-[+]++>++>+++[>[->+++<<+++>]<<]>-----.>->"
 					+ "+++..+++.>-.<<+[>[+>+]>>]<--------------.>>.+++.------.--------.>+.>+";
 	}
@@ -46,42 +45,53 @@ public class InterpreterTest {
 
 	@Test
 	public void testBrackets() {
-		interpreter = new Interpreter(badBrackets, NO_STD_IN, MEMORY_WRAP_OFF, null);
+		interpreter = new Interpreter(null);
+		interpreter.setCode(badBrackets);
 		interpreter.run();
 		assertEquals("ERROR: Loop brackets paired incorrectly.\n", interpreter.getResult());
 	}
 
 	@Test
 	public void testUnusedInput() {
-		interpreter = new Interpreter("", unusedInput, MEMORY_WRAP_OFF, null);
+		interpreter = new Interpreter(null);
+		interpreter.setInput(unusedInput);
 		interpreter.run();
 		assertEquals("WARNING: Unused input data.\n", interpreter.getResult());
 	}
 	
 	@Test
 	public void testInsufficientInput() {
-		interpreter = new Interpreter(",", NO_STD_IN, MEMORY_WRAP_OFF, null);
+		//interpreter = new Interpreter(",", NO_STD_IN, MEMORY_WRAP_OFF, null);
+		interpreter = new Interpreter(null);
+		interpreter.setCode(",");
 		interpreter.run();
 		assertEquals("ERROR: Insufficient input data.\n", interpreter.getResult());
 	}
 
 	@Test
 	public void testMemoryWrapOff() {
-		interpreter = new Interpreter(memoryWrap, NO_STD_IN, MEMORY_WRAP_OFF, null);
+		interpreter = new Interpreter(null);
+		interpreter.setCode(memoryWrapUnderflowTest);
 		interpreter.run();
 		assertEquals("ERROR: Memory Underflow at character 0\n", interpreter.getResult());
+		
+		//TODO: add memoryWrapOverflowTest
 	}
 
 	@Test
 	public void testMemoryWrapOn() {
-		interpreter = new Interpreter(memoryWrap, NO_STD_IN, MEMORY_WRAP_ON, null);
+		interpreter.setCode(memoryWrapUnderflowTest);
+		interpreter.setMemoryWrap(true);
 		interpreter.run();
 		assertEquals("!", interpreter.getResult());
+		
+		//TODO: add memoryWrapOverflowTest
 	}
 
 	@Test
 	public void testHelloWorld() {
-		interpreter = new Interpreter(helloWorld, NO_STD_IN, MEMORY_WRAP_OFF, null);
+		interpreter = new Interpreter(null);
+		interpreter.setCode(helloWorld);
 		interpreter.run();
 		assertEquals("Hello World!", interpreter.getResult());
 	}
