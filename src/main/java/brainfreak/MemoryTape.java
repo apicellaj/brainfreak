@@ -5,10 +5,20 @@ public class MemoryTape {
 	private byte[] memoryTape;
 	
 	private int memoryPosition = 0;
+	private int memorySize = 30000;
 	private boolean hasMemoryWrap = false;
 	
-	public MemoryTape(int numberOfCells) {
-		memoryTape = new byte[numberOfCells];
+	public MemoryTape() {
+		memoryTape = new byte[memorySize];
+	}
+	
+	public void setMemorySize(int memorySize) {
+		this.memorySize = memorySize;
+		memoryTape = new byte[memorySize];
+	}
+	
+	public int getMemorySize() {
+		return memorySize;
 	}
 	
 	public void setMemoryWrap(boolean hasMemoryWrap) {

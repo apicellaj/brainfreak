@@ -9,10 +9,8 @@ import javax.swing.SwingWorker;
 public class Interpreter extends SwingWorker<Void, String> {
 
 	// TODO: RLE Optimization
-	// TODO: Make memory size adjustable
 	
 	private static final long MAX_CALCULATIONS_ALLOWED = Integer.MAX_VALUE;
-	private static final int MEMORY_SIZE = 30000;
 
 	private Controller controller;
 	private MemoryTape memoryTape;
@@ -32,7 +30,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 
 	public Interpreter(Controller controller) {
 		this.controller = controller;
-		memoryTape = new MemoryTape(MEMORY_SIZE);
+		memoryTape = new MemoryTape();
 	}
 
 	@Override
@@ -160,8 +158,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 	private void checkMemory() {
 		if (memoryTape.getMemoryPosition() < 0) {
 			triggerError("Memory Underflow at character " + codePosition);
-		// TODO: change MEMORY_SIZE to memoryTape.getMemorySize()
-		} else if (memoryTape.getMemoryPosition() > MEMORY_SIZE) {
+		} else if (memoryTape.getMemoryPosition() > memoryTape.getMemorySize()) {
 			triggerError("Memory Overflow at character " + codePosition);
 		}
 	}
@@ -247,6 +244,10 @@ public class Interpreter extends SwingWorker<Void, String> {
 	
 	public void setExtendedMode(boolean hasExtendedMode) {
 		this.hasExtendedMode = hasExtendedMode;
+	}
+	
+	public void setMemorySize(int memorySize) {
+		memoryTape.setMemorySize(memorySize);
 	}
 
 	public String getDebugInfo() {

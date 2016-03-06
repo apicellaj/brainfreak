@@ -42,17 +42,27 @@ public class Controller {
 		return gui.isInDebugMode();
 	}
 	
+	public void setMemoryFieldText(String text) {
+		gui.setMemoryFieldText(text);
+	}
+	
+	public void resetMemoryFieldText() {
+		gui.resetMemoryFieldText();
+	}
+	
 	private void launchInterpreter() {
 		final String bfCode = getCodeAreaText();
 		final String stdIn =  getInputAreaText().replaceAll("[^0-9\\s]", "");
 		//TODO: have input field update to reflect regex replacement
 		final boolean hasMemoryWrap = gui.hasMemoryWrap();
 		final boolean hasExtendedMode = gui.hasExtendedSupport();
+		final int memorySize = gui.getMemoryFieldValue();
 		Interpreter interpreter = new Interpreter(this);
 		interpreter.setCode(bfCode);
 		interpreter.setInput(stdIn);
 		interpreter.setMemoryWrap(hasMemoryWrap);
 		interpreter.setExtendedMode(hasExtendedMode);
+		interpreter.setMemorySize(memorySize);
 		gui.addStopButtonListener(new StopButtonActionListener(interpreter));
 		interpreter.execute();
 	}
@@ -85,6 +95,7 @@ public class Controller {
 			gui.setInputAreaText("");
 			gui.setResultAreaText("");
 			gui.resetComboBox();
+			gui.resetMemoryFieldText();
 		}
 	}
 	
