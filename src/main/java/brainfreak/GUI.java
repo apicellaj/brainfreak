@@ -30,10 +30,12 @@ public class GUI extends JFrame {
     private JLabel debugDisplayLabel;
     private JButton runButton;
     private JButton stopButton;
+    private JButton resetButton;
     private JButton cheatSheetButton;
     private JCheckBox extendedModeCheckBox;
     private JCheckBox debugModeCheckBox;
     private JCheckBox memoryWrapCheckBox;
+    private ExampleList exampleList;
     
     public GUI() {
     	createAndShowGui();
@@ -64,6 +66,7 @@ public class GUI extends JFrame {
 		
 		runButton = new JButton("Run");
 		stopButton = new JButton("Stop");
+		resetButton = new JButton("Clear");
 		
 		codeArea = new JTextArea(19,50);
 		inputArea = new JTextArea(2,50);
@@ -89,13 +92,14 @@ public class GUI extends JFrame {
 
         cheatSheetButton = new JButton("ASCII Table");
         
-        ExampleList el = new ExampleList(this);
-        JComboBox<String> sampleProgramsComboBox = el.createComboBox();
+        exampleList = new ExampleList(this);
+        JComboBox<String> sampleProgramsComboBox = exampleList.createComboBox();
         JPanel rightButtonPanel = new JPanel();
         rightButtonPanel.add(sampleProgramsLabel);
         rightButtonPanel.add(sampleProgramsComboBox);
         rightButtonPanel.add(runButton);
         rightButtonPanel.add(stopButton);
+        rightButtonPanel.add(resetButton);
         rightButtonPanel.add(cheatSheetButton);
         
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
@@ -139,6 +143,14 @@ public class GUI extends JFrame {
     public boolean hasMemoryWrap() {
     	return memoryWrapCheckBox.isSelected();
     }
+    
+    public void resetComboBox() {
+    	exampleList.reset();
+    }
+    
+    public void setInputAreaText(String text) {
+    	inputArea.setText(text);
+    }
 
     public String getInputAreaText() {
 		return inputArea.getText();
@@ -174,6 +186,10 @@ public class GUI extends JFrame {
     
     public void addReturnKeyListener(KeyListener keyListener) {
     	codeArea.addKeyListener(keyListener);
+    }
+    
+    public void addResetButtonListener(ActionListener actionListener) {
+    	resetButton.addActionListener(actionListener);
     }
     
     public void addCheatSheetButtonActionListener(ActionListener actionListener) {

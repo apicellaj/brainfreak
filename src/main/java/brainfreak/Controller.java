@@ -14,6 +14,7 @@ public class Controller {
 		
 		gui.addRunButtonListener(new RunButonActionListener());
 		gui.addReturnKeyListener(new ReturnKeyKeyListener());
+		gui.addResetButtonListener(new ResetButtonActionListener());
 		gui.addCheatSheetButtonActionListener(new CheatSheetActionListener());
 	}
 	
@@ -74,6 +75,16 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			interpreter.cancel(true);
 			interpreter.exitProgram();
+		}
+	}
+	
+	class ResetButtonActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gui.setCodeText("");
+			gui.setInputAreaText("");
+			gui.setResultAreaText("");
+			gui.resetComboBox();
 		}
 	}
 	

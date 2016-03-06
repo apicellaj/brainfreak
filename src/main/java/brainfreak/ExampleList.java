@@ -29,6 +29,10 @@ public class ExampleList extends JComboBox<String> {
 		comboBox.setSize(new Dimension(200,30));
 		return comboBox;
 	}
+
+	public void reset() {
+		comboBox.setSelectedIndex(0);
+	}
 	
 	private class Handler implements ItemListener {
 		
