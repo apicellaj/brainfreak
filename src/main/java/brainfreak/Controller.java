@@ -53,7 +53,7 @@ public class Controller {
 	private void launchInterpreter() {
 		final String bfCode = getCodeAreaText();
 		final String stdIn =  getInputAreaText().replaceAll("[^0-9\\s]", "");
-		//TODO: have input field update to reflect regex replacement
+		updateInputAreaText(stdIn);
 		final boolean hasMemoryWrap = gui.hasMemoryWrap();
 		final boolean hasExtendedMode = gui.hasExtendedSupport();
 		final int memorySize = gui.getMemoryFieldValue();
@@ -65,6 +65,10 @@ public class Controller {
 		interpreter.setMemorySize(memorySize);
 		gui.addStopButtonListener(new StopButtonActionListener(interpreter));
 		interpreter.execute();
+	}
+	
+	private void updateInputAreaText(String text) {
+		gui.setInputAreaText(text);
 	}
 	
 	class RunButonActionListener implements ActionListener {
