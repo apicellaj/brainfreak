@@ -35,6 +35,7 @@ public class GUI extends JFrame {
     private JCheckBox extendedModeCheckBox;
     private JCheckBox debugModeCheckBox;
     private JCheckBox memoryWrapCheckBox;
+    private MemoryTextPanel memoryTextPanel;
     private ExampleList exampleList;
     
     public GUI() {
@@ -58,6 +59,7 @@ public class GUI extends JFrame {
 		JLabel extendedBfLabel = new JLabel("Add support for ';' and ':'");
 		JLabel debugModeLabel = new JLabel("Enable debug mode\t\t\t\t\t");
 		JLabel memoryWrapLabel = new JLabel("Enable memory wrap\t\t\t\t\t");
+		JLabel memorySizeLabel = new JLabel("Enter number of memory cells:");
 		debugDisplayLabel = new JLabel(" ");
 		
 		extendedModeCheckBox = new JCheckBox();
@@ -94,6 +96,7 @@ public class GUI extends JFrame {
         
         exampleList = new ExampleList(this);
         JComboBox<String> sampleProgramsComboBox = exampleList.createComboBox();
+        
         JPanel rightButtonPanel = new JPanel();
         rightButtonPanel.add(sampleProgramsLabel);
         rightButtonPanel.add(sampleProgramsComboBox);
@@ -119,6 +122,11 @@ public class GUI extends JFrame {
         debugPanel.add(debugModeLabel);
         debugPanel.add(memoryWrapCheckBox);
         debugPanel.add(memoryWrapLabel);
+        debugPanel.add(memorySizeLabel);
+        
+        memoryTextPanel = new MemoryTextPanel();
+        debugPanel.add(memoryTextPanel);
+        
         rightPanel.add(debugPanel);
         
         frame.getContentPane().add(BorderLayout.EAST, rightPanel);
@@ -170,6 +178,18 @@ public class GUI extends JFrame {
     
     public void setDebugDisplayLabel(String text) {
     	debugDisplayLabel.setText(text);
+    }
+    
+    public void setMemoryFieldText(String text) {
+    	memoryTextPanel.setMemoryFieldText(text);
+    }
+    
+    public int getMemoryFieldValue() {
+    	return Integer.parseInt(memoryTextPanel.getMemoryFieldText());
+    }
+    
+    public void resetMemoryFieldText() {
+    	memoryTextPanel.resetMemoryFieldText();
     }
     
     public void clickRunButton() {
