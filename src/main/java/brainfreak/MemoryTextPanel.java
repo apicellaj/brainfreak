@@ -34,7 +34,7 @@ public class MemoryTextPanel extends JPanel {
 		if (text.length() == 0) {
 			memorySize = "0";
 		} else if (text.length() > 9) {
-			memorySize = text.substring(0,10);
+			memorySize = text.substring(0,9);
 		} else {
 			memorySize = text;
 		}
