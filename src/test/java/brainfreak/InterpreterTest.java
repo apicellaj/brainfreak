@@ -21,6 +21,7 @@ public class InterpreterTest {
 	private String memoryWrapOverflowTest;
 	private String helloWorld;
 	private String extendedModeDivision;
+	private String deletionLoopTest;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -40,6 +41,7 @@ public class InterpreterTest {
 		helloWorld = ">++++++++[-<+++++++++>]<.>>+>-[+]++>++>+++[>[->+++<<+++>]<<]>-----.>->"
 					+ "+++..+++.>-.<<+[>[+>+]>>]<--------------.>>.+++.------.--------.>+.>+";
 		extendedModeDivision = ";[>+<--[>>+>+<<<-]>>[-[>[<<<+>>>-]<[-]]>[->+<]<]<<]>:>>>:";
+		deletionLoopTest = "++++++++++:[-]:";
 	}
 
 	@After
@@ -55,6 +57,16 @@ public class InterpreterTest {
 		
 		interpreter = new Interpreter(null);
 		interpreter.setCode(badBracketsLeft);
+		interpreter.run();
+		assertEquals("ERROR: Loop brackets paired incorrectly.\n", interpreter.getResult());
+		
+		interpreter = new Interpreter(null);
+		interpreter.setCode("]");
+		interpreter.run();
+		assertEquals("ERROR: Loop brackets paired incorrectly.\n", interpreter.getResult());
+		
+		interpreter = new Interpreter(null);
+		interpreter.setCode("[");
 		interpreter.run();
 		assertEquals("ERROR: Loop brackets paired incorrectly.\n", interpreter.getResult());
 	}
@@ -134,6 +146,38 @@ public class InterpreterTest {
 		interpreter.setExtendedMode(true);
 		interpreter.run();
 		assertEquals("9 1 \nWARNING: Unused input data.\n", interpreter.getResult());
+	}
+	
+	@Test
+	public void testDebugInfo() {
+		interpreter = new Interpreter(null);
+		interpreter.setCode("");
+		interpreter.run();
+		assertTrue(interpreter.getDebugInfo().startsWith("Executed 0 commands in "));
+	}
+	
+	@Test
+	public void testDeleteLoop() {
+		interpreter = new Interpreter(null);
+		interpreter.setCode(deletionLoopTest);
+		interpreter.setExtendedMode(true);
+		interpreter.run();
+		assertEquals("10 0 ", interpreter.getResult());
+	}
+	
+	@Test
+	public void testInput() {
+		interpreter = new Interpreter(null);
+		interpreter.setCode(",.>,.>,.>,.");
+		interpreter.setInput("84 101 115 116");
+		interpreter.run();
+		assertEquals("Test", interpreter.getResult());
+		
+		interpreter = new Interpreter(null);
+		interpreter.setCode(",.");
+		interpreter.setInput("-1");
+		interpreter.run();
+		assertEquals("", interpreter.getResult());
 	}
 
 }
