@@ -126,7 +126,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 			result.append(memoryTape.getValue()).append(' ');
 			break;
 		case ',':
-			value = (char) (inputArray[inputPosition++] + 48);
+			value = (char) (inputArray[inputPosition++]);
 			memoryTape.setValue((byte) value);
 			break;
 		case '.':
