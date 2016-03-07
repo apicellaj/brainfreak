@@ -223,7 +223,10 @@ public class Interpreter extends SwingWorker<Void, String> {
 	}
 
 	private String appendWarnings() {
-		return warnings.toString();
+		final boolean emptyResult = result.toString().length() == 0;
+		final boolean emptyWarnings = warnings.toString().length() == 0;
+		String optionalLineBreak = emptyResult || emptyWarnings ? "" : "\n";
+		return optionalLineBreak + warnings.toString();
 	}
 
 	public void exitProgram() {
