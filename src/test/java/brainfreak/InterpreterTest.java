@@ -14,10 +14,13 @@ public class InterpreterTest {
 
 	private Interpreter interpreter;
 
-	private String badBrackets;
+	private String badBracketsRight;
+	private String badBracketsLeft;
 	private String unusedInput;
 	private String memoryWrapUnderflowTest;
+	private String memoryWrapOverflowTest;
 	private String helloWorld;
+	private String extendedModeDivision;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -29,11 +32,14 @@ public class InterpreterTest {
 
 	@Before
 	public void setUp() throws Exception {
-		badBrackets = "][]";
+		badBracketsRight = "][]";
+		badBracketsLeft = "[]]";
 		unusedInput = "1 2 3 4";
-		memoryWrapUnderflowTest = "<++++[-<++++++++>]<+.";
+		memoryWrapUnderflowTest = "<<++++[-<++++++++>]<+.";
+		memoryWrapOverflowTest = ">>>++++[-<++++++++>]<+.";
 		helloWorld = ">++++++++[-<+++++++++>]<.>>+>-[+]++>++>+++[>[->+++<<+++>]<<]>-----.>->"
 					+ "+++..+++.>-.<<+[>[+>+]>>]<--------------.>>.+++.------.--------.>+.>+";
+		extendedModeDivision = ";[>+<--[>>+>+<<<-]>>[-[>[<<<+>>>-]<[-]]>[->+<]<]<<]>:>>>:";
 	}
 
 	@After
@@ -43,7 +49,12 @@ public class InterpreterTest {
 	@Test
 	public void testBrackets() {
 		interpreter = new Interpreter(null);
-		interpreter.setCode(badBrackets);
+		interpreter.setCode(badBracketsRight);
+		interpreter.run();
+		assertEquals("ERROR: Loop brackets paired incorrectly.\n", interpreter.getResult());
+		
+		interpreter = new Interpreter(null);
+		interpreter.setCode(badBracketsLeft);
 		interpreter.run();
 		assertEquals("ERROR: Loop brackets paired incorrectly.\n", interpreter.getResult());
 	}
@@ -54,6 +65,12 @@ public class InterpreterTest {
 		interpreter.setInput(unusedInput);
 		interpreter.run();
 		assertEquals("WARNING: Unused input data.\n", interpreter.getResult());
+		
+		interpreter = new Interpreter(null);
+		interpreter.setCode(helloWorld);
+		interpreter.setInput(unusedInput);
+		interpreter.run();
+		assertEquals("Hello World!\nWARNING: Unused input data.\n", interpreter.getResult());
 	}
 	
 	@Test
@@ -69,9 +86,13 @@ public class InterpreterTest {
 		interpreter = new Interpreter(null);
 		interpreter.setCode(memoryWrapUnderflowTest);
 		interpreter.run();
-		assertEquals("ERROR: Memory Underflow at character 0\n", interpreter.getResult());
+		assertEquals("ERROR: Memory Underflow at character 1\n", interpreter.getResult());
 		
-		//TODO: add memoryWrapOverflowTest
+		interpreter = new Interpreter(null);
+		interpreter.setCode(memoryWrapOverflowTest);
+		interpreter.setMemorySize(2);
+		interpreter.run();
+		assertEquals("ERROR: Memory Overflow at character 2\n", interpreter.getResult());
 	}
 
 	@Test
@@ -82,7 +103,12 @@ public class InterpreterTest {
 		interpreter.run();
 		assertEquals("!", interpreter.getResult());
 		
-		//TODO: add memoryWrapOverflowTest
+		interpreter = new Interpreter(null);
+		interpreter.setCode(memoryWrapOverflowTest);
+		interpreter.setMemoryWrap(true);
+		interpreter.setMemorySize(2);
+		interpreter.run();
+		assertEquals("!", interpreter.getResult());
 	}
 
 	@Test
@@ -95,7 +121,19 @@ public class InterpreterTest {
 
 	@Test
 	public void testExtendedMode() {
-		//TODO
+		interpreter = new Interpreter(null);
+		interpreter.setCode(extendedModeDivision);
+		interpreter.setInput("19");
+		interpreter.setExtendedMode(true);
+		interpreter.run();
+		assertEquals("9 1 ", interpreter.getResult());
+		
+		interpreter = new Interpreter(null);
+		interpreter.setCode(extendedModeDivision);
+		interpreter.setInput("19 1");
+		interpreter.setExtendedMode(true);
+		interpreter.run();
+		assertEquals("9 1 \nWARNING: Unused input data.\n", interpreter.getResult());
 	}
 
 }
