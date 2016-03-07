@@ -176,6 +176,10 @@ public class GUI extends JFrame {
     	resultArea.setText(text);
     }
     
+    public String getResultAreaText() {
+    	return resultArea.getText();
+    }
+    
     public void setDebugDisplayLabel(String text) {
     	debugDisplayLabel.setText(text);
     }
