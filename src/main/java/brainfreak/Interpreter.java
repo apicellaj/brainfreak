@@ -10,8 +10,6 @@ public class Interpreter extends SwingWorker<Void, String> {
 
 	// TODO: RLE Optimization
 	
-	private static final long MAX_CALCULATIONS_ALLOWED = Integer.MAX_VALUE;
-
 	private Controller controller;
 	private MemoryTape memoryTape;
 	private long startTime;
@@ -102,10 +100,6 @@ public class Interpreter extends SwingWorker<Void, String> {
 				numberOfCalculations++;
 				if (numberOfCalculations % 1000000 == 0) {
 					publish(getResult());
-				}
-				if (numberOfCalculations > MAX_CALCULATIONS_ALLOWED) {
-					triggerError("Exceeded maximum number of calculations: "
-							+ NumberFormat.getInstance().format(MAX_CALCULATIONS_ALLOWED));
 				}
 			}
 		}
