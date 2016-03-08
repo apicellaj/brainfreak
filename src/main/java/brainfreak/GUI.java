@@ -9,12 +9,14 @@ import java.awt.event.KeyListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
@@ -24,13 +26,19 @@ public class GUI extends JFrame {
     
 	private static final long serialVersionUID = 1783527103493287966L;
 	
+	private JFrame frame;
 	private JTextArea codeArea;
     private JTextArea inputArea;
     private JTextArea resultArea;
+    private JScrollPane codeAreaScrollPane;
+    private JScrollPane inputAreaScrollPane;
+    private JScrollPane resultAreaScrollPane;
     private JLabel debugDisplayLabel;
     private JButton runButton;
     private JButton stopButton;
     private JButton resetButton;
+    private JRadioButton smallSizeRadioButton;
+    private JRadioButton largeSizeRadioButton;
     private JButton cheatSheetButton;
     private JCheckBox extendedModeCheckBox;
     private JCheckBox debugModeCheckBox;
@@ -43,10 +51,8 @@ public class GUI extends JFrame {
     }
     
     private void createAndShowGui() {
-  	//TODO: maybe make a string pool for localization, probably not necessary
-  	//TODO: add ability to resize frame, enums for various preset lengths
     	
-		JFrame frame = new JFrame();
+		frame = new JFrame();
 		
 		JPanel rightPanel = new JPanel();
 		JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -70,9 +76,16 @@ public class GUI extends JFrame {
 		stopButton = new JButton("Stop");
 		resetButton = new JButton("Clear");
 		
-		codeArea = new JTextArea(19,50);
-		inputArea = new JTextArea(2,50);
-		resultArea = new JTextArea(4,50);
+		ButtonGroup sizeButtonGroup = new ButtonGroup();
+		smallSizeRadioButton = new JRadioButton("Small frame");
+		largeSizeRadioButton = new JRadioButton("Large frame");
+		sizeButtonGroup.add(smallSizeRadioButton);
+		sizeButtonGroup.add(largeSizeRadioButton);
+		smallSizeRadioButton.setSelected(true);
+		
+		codeArea = new JTextArea();
+		inputArea = new JTextArea();
+		resultArea = new JTextArea();
 		
 		resultArea.setEditable(false);
 		codeArea.setAutoscrolls(true);
@@ -80,9 +93,9 @@ public class GUI extends JFrame {
 		inputArea.setLineWrap(true);
 		resultArea.setLineWrap(true);
 
-		JScrollPane codeAreaScrollPane = new JScrollPane(codeArea);
-		JScrollPane inputAreaScrollPane = new JScrollPane(inputArea);
-		JScrollPane resultAreaScrollPane = new JScrollPane(resultArea);
+		codeAreaScrollPane = new JScrollPane(codeArea);
+		inputAreaScrollPane = new JScrollPane(inputArea);
+		resultAreaScrollPane = new JScrollPane(resultArea);
     	
     	centerPanel.add(codeLabel);
     	centerPanel.add(codeAreaScrollPane);
@@ -104,6 +117,8 @@ public class GUI extends JFrame {
         rightButtonPanel.add(stopButton);
         rightButtonPanel.add(resetButton);
         rightButtonPanel.add(cheatSheetButton);
+        rightButtonPanel.add(smallSizeRadioButton);
+        rightButtonPanel.add(largeSizeRadioButton);
         
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
         rightPanel.setPreferredSize(new Dimension(300,800));
@@ -132,12 +147,33 @@ public class GUI extends JFrame {
         frame.getContentPane().add(BorderLayout.EAST, rightPanel);
         frame.getContentPane().add(BorderLayout.WEST, Box.createRigidArea(new Dimension(50,0)));
         frame.getContentPane().add(BorderLayout.CENTER, centerPanel);
-        //frame.setSize(1280, 720);
-        frame.setSize(960, 540);
+        setSizeSmall();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setTitle("Brainfreak Interpreter");
+    }
+    
+    public void setSizeSmall() {
+    	frame.setPreferredSize(new Dimension(960,540));
+    	codeAreaScrollPane.setPreferredSize(new Dimension(600,250));
+    	codeArea.setPreferredSize(new Dimension(600,250));
+    	inputAreaScrollPane.setPreferredSize(new Dimension(600,50));
+		inputArea.setPreferredSize(new Dimension(600,50));
+		resultAreaScrollPane.setPreferredSize(new Dimension(600,100));
+		resultArea.setPreferredSize(new Dimension(600,100));
+		frame.pack();
+    }
+    
+    public void setSizeLarge() {
+    	frame.setPreferredSize(new Dimension(1280,720));
+    	codeAreaScrollPane.setPreferredSize(new Dimension(900,400));
+    	codeArea.setPreferredSize(new Dimension(900,400));
+    	inputAreaScrollPane.setPreferredSize(new Dimension(900,50));
+		inputArea.setPreferredSize(new Dimension(900,50));
+		resultAreaScrollPane.setPreferredSize(new Dimension(900,140));
+		resultArea.setPreferredSize(new Dimension(900,140));
+    	frame.pack();
     }
     
     public boolean isInDebugMode() {
@@ -214,6 +250,14 @@ public class GUI extends JFrame {
     
     public void addResetButtonListener(ActionListener actionListener) {
     	resetButton.addActionListener(actionListener);
+    }
+    
+    public void addSmallSizeRadioButtonListener(ActionListener actionListener) {
+    	smallSizeRadioButton.addActionListener(actionListener);
+    }
+    
+    public void addLargeSizeRadioButtonListener(ActionListener actionListener) {
+    	largeSizeRadioButton.addActionListener(actionListener);
     }
     
     public void addCheatSheetButtonActionListener(ActionListener actionListener) {

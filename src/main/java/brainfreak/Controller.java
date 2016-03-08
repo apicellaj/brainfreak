@@ -16,6 +16,8 @@ public class Controller {
 		gui.addReturnKeyListener(new ReturnKeyKeyListener());
 		gui.addResetButtonListener(new ResetButtonActionListener());
 		gui.addCheatSheetButtonActionListener(new CheatSheetActionListener());
+		gui.addSmallSizeRadioButtonListener(new SmallSizeButtonActionListener());
+		gui.addLargeSizeRadioButtonListener(new LargeSizeButtonActionListener());
 	}
 	
 	public String getInputAreaText() {
@@ -100,6 +102,20 @@ public class Controller {
 			gui.setResultAreaText("");
 			gui.resetComboBox();
 			gui.resetMemoryFieldText();
+		}
+	}
+	
+	class SmallSizeButtonActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gui.setSizeSmall();
+		}
+	}
+	
+	class LargeSizeButtonActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			gui.setSizeLarge();
 		}
 	}
 	
