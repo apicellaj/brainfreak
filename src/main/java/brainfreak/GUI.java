@@ -157,22 +157,16 @@ public class GUI extends JFrame {
     public void setSizeSmall() {
     	frame.setPreferredSize(new Dimension(960,540));
     	codeAreaScrollPane.setPreferredSize(new Dimension(600,250));
-    	codeArea.setPreferredSize(new Dimension(600,250));
     	inputAreaScrollPane.setPreferredSize(new Dimension(600,50));
-		inputArea.setPreferredSize(new Dimension(600,50));
 		resultAreaScrollPane.setPreferredSize(new Dimension(600,100));
-		resultArea.setPreferredSize(new Dimension(600,100));
 		frame.pack();
     }
     
     public void setSizeLarge() {
     	frame.setPreferredSize(new Dimension(1280,720));
     	codeAreaScrollPane.setPreferredSize(new Dimension(900,400));
-    	codeArea.setPreferredSize(new Dimension(900,400));
     	inputAreaScrollPane.setPreferredSize(new Dimension(900,50));
-		inputArea.setPreferredSize(new Dimension(900,50));
 		resultAreaScrollPane.setPreferredSize(new Dimension(900,140));
-		resultArea.setPreferredSize(new Dimension(900,140));
     	frame.pack();
     }
     
