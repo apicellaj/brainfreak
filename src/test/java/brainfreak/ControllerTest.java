@@ -52,6 +52,7 @@ public class ControllerTest {
 		
 		gui.setResultAreaText("reset");
 		gui.resetComboBox();
+		gui.setSizeLarge();
 		assertEquals("reset", gui.getResultAreaText());
 		
 		assertFalse(controller.isInDebugMode());
