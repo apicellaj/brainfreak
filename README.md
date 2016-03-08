@@ -1,24 +1,26 @@
 # brainfreak
-A GUI interpreter for the esoteric language [BF](https://esolangs.org/wiki/Brainfuck)
+A GUI interpreter for the esoteric language [BF](https://esolangs.org/wiki/Brainfuck).
 
 ### Features
-* 30,000 8-bit memory cells
+* 8-bit memory cells
+* Customizable cell count
 * Optional memory wrap
+* Sample programs
+* ASCII lookup table
+* Debug information
 * Enhanced mode
   - `;` Input a number and store it in the cell at the pointer 
   - `:` Output a number and store it in the cell at the pointer
-* ASCII look up table
-* Sample programs
-* Programs can also be run with `SHIFT+ENTER` from the text window
-* Debug information
+
+Programs can also be run from the text area with `SHIFT+ENTER`
 
 ##Usage
 
 ### Building
-brainfreak uses [Gradle](gradle.org) for its build system.
-* Download source zip file and navigate to unzipped folder.
-* Run `./gradlew build` on UNIX or `gradlew.bat` on Windows.
-* Navigate to `/build/libs/` to locate and run the interpreter JAR.
+brainfreak uses [Gradle](gradle.org) to build.
+* Download source zip and navigate to the project folder.
+* Run `gradlew.bat` on Windows or type `./gradlew build` from the command line in Linux / OSX.
+* The interpreter JAR can be located in `/build/libs/`.
 
 ### Running
-In order to run brainfreak directly from source, simply use `./gradlew run`
+In order to run brainfreak directly from source, simply use `./gradlew run` from the command line.
