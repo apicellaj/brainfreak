@@ -116,7 +116,7 @@ public class GUI extends JFrame {
         JComboBox<String> sampleProgramsComboBox = exampleList.createComboBox();
         JPanel sampleProgramsPanel = new JPanel();
         sampleProgramsPanel.setBorder(BorderFactory.
-				createTitledBorder(BorderFactory.createEtchedBorder(), "Sample Programs", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
+				createTitledBorder(BorderFactory.createEmptyBorder(), "Sample Programs", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
         sampleProgramsPanel.add(sampleProgramsComboBox);
         
         JPanel rightButtonPanel = new JPanel();
