@@ -19,8 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
 public class GUI extends JFrame {
     
@@ -56,16 +55,16 @@ public class GUI extends JFrame {
 		
 		JPanel rightPanel = new JPanel();
 		JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		JPanel debugPanel = new JPanel();
+		JPanel optionsPanel = new JPanel();
 	    
 		JLabel codeLabel = new JLabel("Enter your code below:");
 		JLabel inputLabel = new JLabel("Enter standard input (if any):");
 		JLabel resultLabel = new JLabel("Output:");
 		JLabel sampleProgramsLabel = new JLabel("Sample programs:");
 		JLabel extendedBfLabel = new JLabel("Add support for ';' and ':'");
-		JLabel debugModeLabel = new JLabel("Enable debug mode\t\t\t\t\t");
-		JLabel memoryWrapLabel = new JLabel("Enable memory wrap\t\t\t\t\t");
-		JLabel memorySizeLabel = new JLabel("Enter number of memory cells:");
+		JLabel debugModeLabel = new JLabel("Enable debug mode");
+		JLabel memoryWrapLabel = new JLabel("Enable memory wrap");
+		JLabel memorySizeLabel = new JLabel("memory cell(s)");
 		debugDisplayLabel = new JLabel(" ");
 		
 		extendedModeCheckBox = new JCheckBox();
@@ -77,11 +76,17 @@ public class GUI extends JFrame {
 		resetButton = new JButton("Clear");
 		
 		ButtonGroup sizeButtonGroup = new ButtonGroup();
-		smallSizeRadioButton = new JRadioButton("Small frame");
-		largeSizeRadioButton = new JRadioButton("Large frame");
+		smallSizeRadioButton = new JRadioButton("Small");
+		largeSizeRadioButton = new JRadioButton("Large");
 		sizeButtonGroup.add(smallSizeRadioButton);
 		sizeButtonGroup.add(largeSizeRadioButton);
 		smallSizeRadioButton.setSelected(true);
+
+		JPanel sizeButtonPanel = new JPanel();
+		sizeButtonPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Frame Size", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
+		//sizeButtonPanel.setPreferredSize(new Dimension(300,30));
+		sizeButtonPanel.add(smallSizeRadioButton);
+		sizeButtonPanel.add(largeSizeRadioButton);
 		
 		codeArea = new JTextArea();
 		inputArea = new JTextArea();
@@ -117,32 +122,43 @@ public class GUI extends JFrame {
         rightButtonPanel.add(stopButton);
         rightButtonPanel.add(resetButton);
         rightButtonPanel.add(cheatSheetButton);
-        rightButtonPanel.add(smallSizeRadioButton);
-        rightButtonPanel.add(largeSizeRadioButton);
         
+        // TODO: change rightPanel to GridBagLayout
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
         rightPanel.setPreferredSize(new Dimension(300,800));
-        rightPanel.setBorder(BorderFactory.createEtchedBorder());
-        rightPanel.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new EtchedBorder()));
-        rightPanel.add(rightButtonPanel);
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
-        debugPanel.setPreferredSize(new Dimension(100,100));
-        debugPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        debugPanel.setBorder(BorderFactory.createEtchedBorder());
-        debugPanel.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(20, 20, 20, 20), new EtchedBorder()));
         
-        debugPanel.add(extendedModeCheckBox);
-        debugPanel.add(extendedBfLabel);
-        debugPanel.add(debugModeCheckBox);
-        debugPanel.add(debugModeLabel);
-        debugPanel.add(memoryWrapCheckBox);
-        debugPanel.add(memoryWrapLabel);
-        debugPanel.add(memorySizeLabel);
+        optionsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        optionsPanel.setPreferredSize(new Dimension(300,30));
+        optionsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Options", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
         
+        JPanel extendedModePanel = new JPanel();
+        extendedModePanel.add(extendedModeCheckBox);
+        extendedModePanel.add(extendedBfLabel);
+        
+        JPanel debugModePanel = new JPanel();
+        debugModePanel.add(debugModeCheckBox);
+        debugModePanel.add(debugModeLabel);
+        
+        JPanel memoryWrapPanel = new JPanel();
+        memoryWrapPanel.add(memoryWrapCheckBox);
+        memoryWrapPanel.add(memoryWrapLabel);
+        
+        JPanel memorySizePanel = new JPanel();
         memoryTextPanel = new MemoryTextPanel();
-        debugPanel.add(memoryTextPanel);
+        memorySizePanel.add(memoryTextPanel);
+        memorySizePanel.add(memorySizeLabel);
         
-        rightPanel.add(debugPanel);
+        optionsPanel.add(extendedModePanel);
+        optionsPanel.add(debugModePanel);
+        optionsPanel.add(memoryWrapPanel);
+        optionsPanel.add(memorySizePanel);
+        
+        rightPanel.add(rightButtonPanel);
+        // TODO: change sizeButtonPanel to rightPanel
+        rightButtonPanel.add(sizeButtonPanel);
+        rightPanel.add(optionsPanel);
         
         frame.getContentPane().add(BorderLayout.EAST, rightPanel);
         frame.getContentPane().add(BorderLayout.WEST, Box.createRigidArea(new Dimension(50,0)));
