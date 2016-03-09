@@ -3,12 +3,13 @@ package main.java.brainfreak;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -60,7 +61,6 @@ public class GUI extends JFrame {
 		JLabel codeLabel = new JLabel("Enter your code below:");
 		JLabel inputLabel = new JLabel("Enter standard input (if any):");
 		JLabel resultLabel = new JLabel("Output:");
-		JLabel sampleProgramsLabel = new JLabel("Sample programs:");
 		JLabel extendedBfLabel = new JLabel("Add support for ';' and ':'");
 		JLabel debugModeLabel = new JLabel("Enable debug mode");
 		JLabel memoryWrapLabel = new JLabel("Enable memory wrap");
@@ -83,8 +83,8 @@ public class GUI extends JFrame {
 		smallSizeRadioButton.setSelected(true);
 
 		JPanel sizeButtonPanel = new JPanel();
-		sizeButtonPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Frame Size", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
-		//sizeButtonPanel.setPreferredSize(new Dimension(300,30));
+		sizeButtonPanel.setBorder(BorderFactory.
+				createTitledBorder(BorderFactory.createEtchedBorder(), "Frame Size", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
 		sizeButtonPanel.add(smallSizeRadioButton);
 		sizeButtonPanel.add(largeSizeRadioButton);
 		
@@ -114,20 +114,16 @@ public class GUI extends JFrame {
         
         exampleList = new ExampleList(this);
         JComboBox<String> sampleProgramsComboBox = exampleList.createComboBox();
+        JPanel sampleProgramsPanel = new JPanel();
+        sampleProgramsPanel.setBorder(BorderFactory.
+				createTitledBorder(BorderFactory.createEtchedBorder(), "Sample Programs", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
+        sampleProgramsPanel.add(sampleProgramsComboBox);
         
         JPanel rightButtonPanel = new JPanel();
-        rightButtonPanel.add(sampleProgramsLabel);
-        rightButtonPanel.add(sampleProgramsComboBox);
         rightButtonPanel.add(runButton);
         rightButtonPanel.add(stopButton);
         rightButtonPanel.add(resetButton);
         rightButtonPanel.add(cheatSheetButton);
-        
-        // TODO: change rightPanel to GridBagLayout
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
-        rightPanel.setPreferredSize(new Dimension(300,800));
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
         
         optionsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         optionsPanel.setPreferredSize(new Dimension(300,30));
@@ -154,16 +150,48 @@ public class GUI extends JFrame {
         optionsPanel.add(debugModePanel);
         optionsPanel.add(memoryWrapPanel);
         optionsPanel.add(memorySizePanel);
+
+        GridBagLayout gbLayout = new GridBagLayout();
+        rightPanel.setLayout(gbLayout);
+        rightPanel.setPreferredSize(new Dimension(300,800));
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
-        rightPanel.add(rightButtonPanel);
-        // TODO: change sizeButtonPanel to rightPanel
-        rightButtonPanel.add(sizeButtonPanel);
-        rightPanel.add(optionsPanel);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.LINE_START;
         
+        gbc.ipady = 15;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        rightPanel.add(sampleProgramsPanel, gbc);
+        
+        gbc.ipady = 30;;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        rightPanel.add(rightButtonPanel, gbc);
+        
+        gbc.ipady = 5;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        rightPanel.add(sizeButtonPanel, gbc);
+        
+        gbc.ipady = 125;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        rightPanel.add(optionsPanel, gbc);
+        
+        setSizeSmall();
         frame.getContentPane().add(BorderLayout.EAST, rightPanel);
         frame.getContentPane().add(BorderLayout.WEST, Box.createRigidArea(new Dimension(50,0)));
         frame.getContentPane().add(BorderLayout.CENTER, centerPanel);
-        setSizeSmall();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setResizable(false);
