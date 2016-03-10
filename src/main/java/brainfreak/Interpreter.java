@@ -152,7 +152,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 	private void checkMemory() {
 		if (memoryTape.getMemoryPosition() < 0) {
 			triggerError("Memory Underflow at character " + codePosition);
-		} else if (memoryTape.getMemoryPosition() > memoryTape.getMemorySize()) {
+		} else if (memoryTape.getMemoryPosition() >= memoryTape.getMemorySize()) {
 			triggerError("Memory Overflow at character " + codePosition);
 		}
 	}
