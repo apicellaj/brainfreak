@@ -129,6 +129,12 @@ public class InterpreterTest {
 		interpreter.setCode(helloWorld);
 		interpreter.run();
 		assertEquals("Hello World!", interpreter.getResult());
+		
+		interpreter = new Interpreter(null);
+		interpreter.setCode(helloWorld);
+		interpreter.setMemorySize(1);
+		interpreter.run();
+		assertEquals("ERROR: Memory Overflow at character 0\n", interpreter.getResult());		
 	}
 
 	@Test
