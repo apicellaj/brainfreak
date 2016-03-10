@@ -84,7 +84,8 @@ public class GUI extends JFrame {
 
 		JPanel sizeButtonPanel = new JPanel();
 		sizeButtonPanel.setBorder(BorderFactory.
-				createTitledBorder(BorderFactory.createEtchedBorder(), "Frame Size", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
+				createTitledBorder(BorderFactory.createEtchedBorder(), 
+						"Frame Size", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
 		sizeButtonPanel.add(smallSizeRadioButton);
 		sizeButtonPanel.add(largeSizeRadioButton);
 		
@@ -110,13 +111,14 @@ public class GUI extends JFrame {
         centerPanel.add(resultAreaScrollPane);
         centerPanel.add(debugDisplayLabel);
 
-        cheatSheetButton = new JButton("ASCII Table");
+        cheatSheetButton = new JButton("ASCII Lookup Table");
         
         exampleList = new ExampleList(this);
         JComboBox<String> sampleProgramsComboBox = exampleList.createComboBox();
         JPanel sampleProgramsPanel = new JPanel();
         sampleProgramsPanel.setBorder(BorderFactory.
-				createTitledBorder(BorderFactory.createEmptyBorder(), "Sample Programs", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
+				createTitledBorder(BorderFactory.createEmptyBorder(), 
+						"Sample Programs", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
         sampleProgramsPanel.add(sampleProgramsComboBox);
         
         JPanel rightButtonPanel = new JPanel();
@@ -127,7 +129,8 @@ public class GUI extends JFrame {
         
         optionsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         optionsPanel.setPreferredSize(new Dimension(300,30));
-        optionsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Options", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
+        optionsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), 
+        		"Options", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
         
         JPanel extendedModePanel = new JPanel();
         extendedModePanel.add(extendedModeCheckBox);
@@ -167,7 +170,7 @@ public class GUI extends JFrame {
         gbc.gridy = 0;
         rightPanel.add(sampleProgramsPanel, gbc);
         
-        gbc.ipady = 30;;
+        gbc.ipady = 30;
         gbc.weightx = 1;
         gbc.weighty = 1;
         gbc.gridx = 0;
