@@ -20,7 +20,7 @@ Programs can also be run from the text area with `SHIFT+ENTER`
 brainfreak uses [Gradle](gradle.org) to build.
 * Download source zip and navigate to the project folder.
 * Run `gradlew.bat` on Windows or type `./gradlew build` from the command line in Linux / OSX.
-* The interpreter JAR can be located in `/build/libs/`.
+* The brainfreak JAR can be located in `/build/libs/`.
 
 ### Running
 In order to run brainfreak directly from source, simply use `./gradlew run` from the command line.

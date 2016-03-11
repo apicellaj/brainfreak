@@ -4,7 +4,7 @@ apply plugin: "application"
 mainClassName = "main.java.brainfreak.Brainfreak"
 
 jar {
-    baseName = "Brainfreak Interpreter"
+    baseName = "brainfreak"
     //version = "0.1.0"
     manifest {
         attributes "Main-Class": "main.java.brainfreak.Brainfreak"
