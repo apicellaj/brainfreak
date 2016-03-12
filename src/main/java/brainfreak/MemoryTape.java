@@ -13,7 +13,7 @@ public class MemoryTape {
 	}
 	
 	public byte[] getMemoryTape() {
-		return memoryTape;
+		return memoryTape.clone();
 	}
 	
 	public void setMemorySize(int memorySize) {
