@@ -44,6 +44,10 @@ public class Controller {
 		return gui.isInDebugMode();
 	}
 	
+	public boolean hasMemoryDump() {
+		return gui.hasMemoryDump();
+	}
+	
 	public void setMemoryFieldText(String text) {
 		gui.setMemoryFieldText(text);
 	}

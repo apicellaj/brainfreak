@@ -22,6 +22,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 	private long numberOfCalculations = 0;
 	private boolean stopProgram = false;
 	private boolean hasExtendedMode = false;
+	private byte[] memoryDumpSnapshot = null;
 
 	private StringBuilder result = new StringBuilder();
 	private StringBuilder warnings = new StringBuilder();
@@ -45,7 +46,9 @@ public class Interpreter extends SwingWorker<Void, String> {
 	@Override
 	protected void done() {
 		if (controller != null) {
-			new MemoryDump(memoryTape.getMemoryTape());
+			if (controller.hasMemoryDump() && memoryDumpSnapshot != null) {
+				new MemoryDump(memoryDumpSnapshot);
+			}
 			final String debugInformation = controller.isInDebugMode() ? getDebugInfo() : "";
 			controller.setResultAreaText(getResult());
 			controller.setDebugDisplayLabel(debugInformation);
@@ -67,8 +70,8 @@ public class Interpreter extends SwingWorker<Void, String> {
 	
 	private void replaceWithCode() {
 		final String regexPattern = (hasExtendedMode) ? 
-				"[^\\>\\<\\+\\-\\.\\,\\:\\;\\[\\]]" : 
-				"[^\\>\\<\\+\\-\\.\\,\\[\\]]";
+				"[^\\>\\<\\+\\-\\.\\,\\:\\;\\[\\]\\#]" : 
+				"[^\\>\\<\\+\\-\\.\\,\\[\\]\\#]";
 		this.code = code.replaceAll(regexPattern, "");
 	}
 
@@ -147,6 +150,10 @@ public class Interpreter extends SwingWorker<Void, String> {
 		case '[':
 			enterLoop(codePosition + 1);
 			break;
+		case '#':
+			if (memoryDumpSnapshot == null) {
+				memoryDumpSnapshot = memoryTape.getMemoryTape();
+			}
 		}
 	}
 
