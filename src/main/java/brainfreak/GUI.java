@@ -43,6 +43,7 @@ public class GUI extends JFrame {
     private JCheckBox extendedModeCheckBox;
     private JCheckBox debugModeCheckBox;
     private JCheckBox memoryWrapCheckBox;
+    private JCheckBox memoryDumpCheckBox;
     private MemoryTextPanel memoryTextPanel;
     private ExampleList exampleList;
     
@@ -64,12 +65,14 @@ public class GUI extends JFrame {
 		JLabel extendedBfLabel = new JLabel("Add support for ';' and ':'");
 		JLabel debugModeLabel = new JLabel("Enable debug mode");
 		JLabel memoryWrapLabel = new JLabel("Enable memory wrap");
+		JLabel memoryDumpLabel = new JLabel("Dump memory at character '#'");
 		JLabel memorySizeLabel = new JLabel("memory cell(s)");
 		debugDisplayLabel = new JLabel(" ");
 		
 		extendedModeCheckBox = new JCheckBox();
 		debugModeCheckBox = new JCheckBox();
 		memoryWrapCheckBox = new JCheckBox();
+		memoryDumpCheckBox = new JCheckBox();
 		
 		runButton = new JButton("Run");
 		stopButton = new JButton("Stop");
@@ -149,9 +152,14 @@ public class GUI extends JFrame {
         memorySizePanel.add(memoryTextPanel);
         memorySizePanel.add(memorySizeLabel);
         
+        JPanel memoryDumpPanel = new JPanel();
+        memoryDumpPanel.add(memoryDumpCheckBox);
+        memoryDumpPanel.add(memoryDumpLabel);
+        
         optionsPanel.add(extendedModePanel);
         optionsPanel.add(debugModePanel);
         optionsPanel.add(memoryWrapPanel);
+        optionsPanel.add(memoryDumpPanel);
         optionsPanel.add(memorySizePanel);
 
         GridBagLayout gbLayout = new GridBagLayout();
@@ -163,14 +171,14 @@ public class GUI extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.LINE_START;
         
-        gbc.ipady = 15;
+        gbc.ipady = 10;
         gbc.weightx = 1;
         gbc.weighty = 1;
         gbc.gridx = 0;
         gbc.gridy = 0;
         rightPanel.add(sampleProgramsPanel, gbc);
         
-        gbc.ipady = 30;
+        gbc.ipady = 25;
         gbc.weightx = 1;
         gbc.weighty = 1;
         gbc.gridx = 0;
@@ -184,7 +192,7 @@ public class GUI extends JFrame {
         gbc.gridy = 2;
         rightPanel.add(sizeButtonPanel, gbc);
         
-        gbc.ipady = 125;
+        gbc.ipady = 150;
         gbc.weightx = 1;
         gbc.weighty = 1;
         gbc.gridx = 0;
@@ -227,6 +235,10 @@ public class GUI extends JFrame {
     
     public boolean hasMemoryWrap() {
     	return memoryWrapCheckBox.isSelected();
+    }
+    
+    public boolean hasMemoryDump() {
+    	return memoryDumpCheckBox.isSelected();
     }
     
     public void resetComboBox() {
