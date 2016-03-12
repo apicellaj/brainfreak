@@ -45,6 +45,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 	@Override
 	protected void done() {
 		if (controller != null) {
+			new MemoryDump(memoryTape.getMemoryTape());
 			final String debugInformation = controller.isInDebugMode() ? getDebugInfo() : "";
 			controller.setResultAreaText(getResult());
 			controller.setDebugDisplayLabel(debugInformation);

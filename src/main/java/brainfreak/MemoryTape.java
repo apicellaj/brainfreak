@@ -12,6 +12,10 @@ public class MemoryTape {
 		memoryTape = new byte[memorySize];
 	}
 	
+	public byte[] getMemoryTape() {
+		return memoryTape;
+	}
+	
 	public void setMemorySize(int memorySize) {
 		this.memorySize = memorySize;
 		memoryTape = new byte[memorySize];
