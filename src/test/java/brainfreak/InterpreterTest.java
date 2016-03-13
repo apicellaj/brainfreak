@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import main.java.brainfreak.Controller;
+import main.java.brainfreak.GUI;
 import main.java.brainfreak.Interpreter;
 
 public class InterpreterTest {
@@ -22,6 +24,7 @@ public class InterpreterTest {
 	private String helloWorld;
 	private String extendedModeDivision;
 	private String deletionLoopTest;
+	private String helloWorldMemoryDump;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -42,6 +45,8 @@ public class InterpreterTest {
 					+ "+++..+++.>-.<<+[>[+>+]>>]<--------------.>>.+++.------.--------.>+.>+";
 		extendedModeDivision = ";[>+<--[>>+>+<<<-]>>[-[>[<<<+>>>-]<[-]]>[->+<]<]<<]>:>>>:";
 		deletionLoopTest = "++++++++++:[-]:";
+		helloWorldMemoryDump = ">++++++++[-<+++++++++>]<.>>+>-[+]++>++>+++[>[->+++<<+++>]<<" +
+				"]>-----.>->+++..+++.>-.<<+[>[+>+]>>]<--------------.>>.+++.------.--------.>+.>+.#";
 	}
 
 	@After
@@ -184,6 +189,26 @@ public class InterpreterTest {
 		interpreter.setInput("-1");
 		interpreter.run();
 		assertEquals("", interpreter.getResult());
+	}
+	
+	@Test
+	public void testMemoryDump() {
+		interpreter = new Interpreter(new Controller(new GUI()));
+		interpreter.setCode(helloWorldMemoryDump);
+		interpreter.setMemoryDump(true);
+		interpreter.run();
+		byte[] memoryDumpSnapshot = interpreter.getMemoryDumpSnapshot();
+		assertNotNull(memoryDumpSnapshot);
+		
+		assertEquals(72, memoryDumpSnapshot[0]);
+		assertEquals(87, memoryDumpSnapshot[2]);
+		assertEquals(100, memoryDumpSnapshot[4]);
+		
+		interpreter = new Interpreter(new Controller(new GUI()));
+		interpreter.setCode(helloWorldMemoryDump);
+		interpreter.setMemoryDump(false);
+		interpreter.run();
+		assertNull(interpreter.getMemoryDumpSnapshot());
 	}
 
 }
