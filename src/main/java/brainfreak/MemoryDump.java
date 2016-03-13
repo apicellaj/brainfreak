@@ -21,7 +21,7 @@ public class MemoryDump extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 6911289527909024022L;
-	private static final int TABLE_HEIGHT = 471;
+	private static final int TABLE_HEIGHT = 150;
 	private static final int TABLE_WIDTH = 300;
 
 	public MemoryDump(byte[] memoryCells) {
@@ -65,6 +65,7 @@ public class MemoryDump extends JDialog {
 		add(new JScrollPane(memoryTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setTitle("Memory dump");
 		setSize(new Dimension(TABLE_WIDTH, TABLE_HEIGHT));
 		setVisible(true);
 	}
