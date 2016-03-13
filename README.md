@@ -7,12 +7,14 @@ A GUI interpreter for the esoteric language [BF](https://esolangs.org/wiki/Brain
 * Optional memory wrap
 * Sample programs
 * ASCII lookup table
+* Memory dump
 * Debug information
 * Enhanced mode
   - `;` Input a number and store it in the cell at the pointer 
   - `:` Output a number and store it in the cell at the pointer
 
 Programs can also be run from the text area with `SHIFT+ENTER`
+ASCII lookup table and memory dump windows can be closed with `ESC`
 
 ##Usage
 
