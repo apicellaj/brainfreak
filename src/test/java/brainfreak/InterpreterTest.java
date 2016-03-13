@@ -203,12 +203,29 @@ public class InterpreterTest {
 		assertEquals(72, memoryDumpSnapshot[0]);
 		assertEquals(87, memoryDumpSnapshot[2]);
 		assertEquals(100, memoryDumpSnapshot[4]);
-		
+	}
+	
+	@Test
+	public void testMemoryDumpOff() {
 		interpreter = new Interpreter(new Controller(new GUI()));
 		interpreter.setCode(helloWorldMemoryDump);
 		interpreter.setMemoryDump(false);
 		interpreter.run();
 		assertNull(interpreter.getMemoryDumpSnapshot());
+	}
+	
+	@Test
+	public void testExtraMemoryDumpChar() {
+		interpreter = new Interpreter(new Controller(new GUI()));
+		interpreter.setCode("#" + helloWorldMemoryDump);
+		interpreter.setMemoryDump(true);
+		interpreter.run();
+		byte[] extraMemoryDumpChar = interpreter.getMemoryDumpSnapshot();
+		assertNotNull(extraMemoryDumpChar);
+		
+		assertEquals(0, extraMemoryDumpChar[0]);
+		assertEquals(0, extraMemoryDumpChar[2]);
+		assertEquals(0, extraMemoryDumpChar[4]);
 	}
 
 }
