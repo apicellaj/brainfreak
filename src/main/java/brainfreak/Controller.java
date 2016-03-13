@@ -44,10 +44,6 @@ public class Controller {
 		return gui.isInDebugMode();
 	}
 	
-	public boolean hasMemoryDump() {
-		return gui.hasMemoryDump();
-	}
-	
 	public void setMemoryFieldText(String text) {
 		gui.setMemoryFieldText(text);
 	}
@@ -62,12 +58,14 @@ public class Controller {
 		updateInputAreaText(stdIn);
 		final boolean hasMemoryWrap = gui.hasMemoryWrap();
 		final boolean hasExtendedMode = gui.hasExtendedSupport();
+		final boolean hasMemoryDump = gui.hasMemoryDump();
 		final int memorySize = gui.getMemoryFieldValue();
 		Interpreter interpreter = new Interpreter(this);
 		interpreter.setCode(bfCode);
 		interpreter.setInput(stdIn);
 		interpreter.setMemoryWrap(hasMemoryWrap);
 		interpreter.setExtendedMode(hasExtendedMode);
+		interpreter.setMemoryDump(hasMemoryDump);
 		interpreter.setMemorySize(memorySize);
 		gui.addStopButtonListener(new StopButtonActionListener(interpreter));
 		interpreter.execute();

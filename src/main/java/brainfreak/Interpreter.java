@@ -22,6 +22,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 	private long numberOfCalculations = 0;
 	private boolean stopProgram = false;
 	private boolean hasExtendedMode = false;
+	private boolean hasMemoryDump = false;
 	private byte[] memoryDumpSnapshot = null;
 
 	private StringBuilder result = new StringBuilder();
@@ -46,7 +47,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 	@Override
 	protected void done() {
 		if (controller != null) {
-			if (controller.hasMemoryDump() && memoryDumpSnapshot != null) {
+			if (hasMemoryDump && memoryDumpSnapshot != null) {
 				new MemoryDump(memoryDumpSnapshot);
 			}
 			final String debugInformation = controller.isInDebugMode() ? getDebugInfo() : "";
@@ -151,7 +152,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 			enterLoop(codePosition + 1);
 			break;
 		case '#':
-			if (memoryDumpSnapshot == null) {
+			if (memoryDumpSnapshot == null && hasMemoryDump) {
 				memoryDumpSnapshot = memoryTape.getMemoryTape();
 			}
 		}
@@ -251,8 +252,16 @@ public class Interpreter extends SwingWorker<Void, String> {
 		this.hasExtendedMode = hasExtendedMode;
 	}
 	
+	public void setMemoryDump(boolean hasMemoryDump) {
+		this.hasMemoryDump = hasMemoryDump;
+	}
+	
 	public void setMemorySize(int memorySize) {
 		memoryTape.setMemorySize(memorySize);
+	}
+	
+	public byte[] getMemoryDumpSnapshot() {
+		return memoryDumpSnapshot;
 	}
 
 	public String getDebugInfo() {
