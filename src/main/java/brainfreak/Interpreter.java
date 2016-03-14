@@ -10,6 +10,8 @@ public class Interpreter extends SwingWorker<Void, String> {
 
 	// TODO: RLE Optimization
 	
+	final static private char memoryDumpChar = '#';
+	
 	private Controller controller;
 	private MemoryTape memoryTape;
 	private long startTime;
@@ -95,6 +97,9 @@ public class Interpreter extends SwingWorker<Void, String> {
 		if (!hasEnoughInputData()) {
 			triggerError("Insufficient input data.");
 		}
+		if (!hasSingleMemoryDumpChar() && hasMemoryDump) {
+			warnings.append("WARNING: Extra memory dump character.\n");
+		}
 	}
 
 	private void decode(int start) {
@@ -151,7 +156,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 		case '[':
 			enterLoop(codePosition + 1);
 			break;
-		case '#':
+		case memoryDumpChar:
 			if (memoryDumpSnapshot == null && hasMemoryDump) {
 				memoryDumpSnapshot = memoryTape.getMemoryTape();
 			}
@@ -218,6 +223,10 @@ public class Interpreter extends SwingWorker<Void, String> {
 			warnings.append("WARNING: Unused input data.\n");
 		}
 		return inputCharacterLength <= inputArraySize ? true : false;
+	}
+	
+	private boolean hasSingleMemoryDumpChar() {
+		return code.indexOf(memoryDumpChar) == code.lastIndexOf(memoryDumpChar);
 	}
 
 	private void triggerError(String error) {
