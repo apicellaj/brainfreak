@@ -223,6 +223,8 @@ public class InterpreterTest {
 		byte[] extraMemoryDumpChar = interpreter.getMemoryDumpSnapshot();
 		assertNotNull(extraMemoryDumpChar);
 		
+		assertEquals("Hello World!\n\nWARNING: Extra memory dump character.\n", interpreter.getResult());
+		
 		assertEquals(0, extraMemoryDumpChar[0]);
 		assertEquals(0, extraMemoryDumpChar[2]);
 		assertEquals(0, extraMemoryDumpChar[4]);
