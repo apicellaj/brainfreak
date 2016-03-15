@@ -223,11 +223,38 @@ public class InterpreterTest {
 		byte[] extraMemoryDumpChar = interpreter.getMemoryDumpSnapshot();
 		assertNotNull(extraMemoryDumpChar);
 		
-		assertEquals("Hello World!\n\nWARNING: Extra memory dump character.\n", interpreter.getResult());
+		assertEquals("Hello World!\n" +
+					"\nWARNING: Extra memory dump character.\n", 
+					interpreter.getResult());
 		
 		assertEquals(0, extraMemoryDumpChar[0]);
 		assertEquals(0, extraMemoryDumpChar[2]);
 		assertEquals(0, extraMemoryDumpChar[4]);
+	}
+	
+	@Test
+	public void testMultipleWarnings() {
+		interpreter = new Interpreter(new Controller(new GUI()));
+		interpreter.setCode(helloWorldMemoryDump + "#");
+		interpreter.setInput(unusedInput);
+		interpreter.setMemoryDump(true);
+		interpreter.run();
+		assertEquals("Hello World!\n" +
+					"\n" +
+					"WARNING: Unused input data.\n" +
+					"WARNING: Extra memory dump character.\n",
+					interpreter.getResult());
+		
+		interpreter = new Interpreter(new Controller(new GUI()));
+		interpreter.setCode(helloWorldMemoryDump + "#]");
+		interpreter.setInput(unusedInput);
+		interpreter.setMemoryDump(true);
+		interpreter.run();
+		assertEquals("ERROR: Loop brackets paired incorrectly.\n" + 
+					"\n" + 
+					"WARNING: Unused input data.\n" + 
+					"WARNING: Extra memory dump character.\n",
+					interpreter.getResult());
 	}
 
 }
