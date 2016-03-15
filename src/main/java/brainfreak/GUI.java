@@ -206,7 +206,7 @@ public class GUI extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setResizable(false);
-        frame.setTitle("Brainfreak Interpreter");
+        frame.setTitle("brainfreak");
     }
     
     public void setSizeSmall() {
