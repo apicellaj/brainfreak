@@ -5,7 +5,7 @@ A GUI interpreter for the esoteric language [BF](https://esolangs.org/wiki/Brain
 * 8-bit memory cells
 * Customizable cell count
 * Optional memory wrap
-* Sample programs
+* Sample programs*
 * ASCII lookup table
 * Memory dump
 * Debug information
@@ -17,6 +17,9 @@ Programs can also be run from the text area with `SHIFT+ENTER`
 
 ASCII lookup table and memory dump windows can be closed with `ESC`
 
+*Credit to [Daniel B. Cristofani](http://www.hevanet.com/cristofd/brainfuck/) and 
+[Panu Kalliokoski](http://esoteric.sange.fi/brainfuck/) for several examples programs.
+
 ##Usage
 
 ### Building
@@ -27,3 +30,6 @@ brainfreak uses [Gradle](gradle.org) to build.
 
 ### Running
 In order to run brainfreak directly from source, simply use `./gradlew run` from the command line.
+
+## Screenshot
+(https://github.com/apicellaj/brainfreak/blob/master/brainfreak.png)
