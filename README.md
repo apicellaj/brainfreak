@@ -32,4 +32,4 @@ brainfreak uses [Gradle](gradle.org) to build.
 In order to run brainfreak directly from source, simply use `./gradlew run` from the command line.
 
 ## Screenshot
-(https://github.com/apicellaj/brainfreak/blob/master/brainfreak.png)
+[!(https://github.com/apicellaj/brainfreak/blob/master/brainfreak.png)]
