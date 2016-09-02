@@ -6,12 +6,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Controller {
-	
+
 	final private GUI gui;
-	
+
 	public Controller(final GUI gui) {
 		this.gui = gui;
-		
+
 		gui.addRunButtonListener(new RunButonActionListener());
 		gui.addReturnKeyListener(new ReturnKeyKeyListener());
 		gui.addResetButtonListener(new ResetButtonActionListener());
@@ -19,19 +19,19 @@ public class Controller {
 		gui.addSmallSizeRadioButtonListener(new SmallSizeButtonActionListener());
 		gui.addLargeSizeRadioButtonListener(new LargeSizeButtonActionListener());
 	}
-	
+
 	public String getInputAreaText() {
 		return gui.getInputAreaText();
 	}
-	
+
 	public String getCodeAreaText() {
 		return gui.getCodeText();
 	}
-	
+
 	public void setCodeAreaText(String text) {
 		gui.setCodeText(text);
 	}
-	
+
 	public void setResultAreaText(String text) {
 		gui.setResultAreaText(text);
 	}
@@ -39,22 +39,22 @@ public class Controller {
 	public void setDebugDisplayLabel(String debugInformation) {
 		gui.setDebugDisplayLabel(debugInformation);
 	}
-	
+
 	public boolean isInDebugMode() {
 		return gui.isInDebugMode();
 	}
-	
+
 	public void setMemoryFieldText(String text) {
 		gui.setMemoryFieldText(text);
 	}
-	
+
 	public void resetMemoryFieldText() {
 		gui.resetMemoryFieldText();
 	}
-	
+
 	private void launchInterpreter() {
 		final String bfCode = getCodeAreaText();
-		final String stdIn =  getInputAreaText().replaceAll("[^0-9\\s]", "");
+		final String stdIn = getInputAreaText().replaceAll("[^0-9\\s]", "");
 		updateInputAreaText(stdIn);
 		final boolean hasMemoryWrap = gui.hasMemoryWrap();
 		final boolean hasExtendedMode = gui.hasExtendedSupport();
@@ -70,32 +70,32 @@ public class Controller {
 		gui.addStopButtonListener(new StopButtonActionListener(interpreter));
 		interpreter.execute();
 	}
-	
+
 	private void updateInputAreaText(String text) {
 		gui.setInputAreaText(text);
 	}
-	
+
 	class RunButonActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			launchInterpreter();
 		}
 	}
-	
+
 	class StopButtonActionListener implements ActionListener {
 		private Interpreter interpreter;
-		
+
 		public StopButtonActionListener(Interpreter interpreter) {
 			this.interpreter = interpreter;
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			interpreter.cancel(true);
 			interpreter.exitProgram();
 		}
 	}
-	
+
 	class ResetButtonActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -106,43 +106,44 @@ public class Controller {
 			gui.resetMemoryFieldText();
 		}
 	}
-	
+
 	class SmallSizeButtonActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			gui.setSizeSmall();
 		}
 	}
-	
+
 	class LargeSizeButtonActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			gui.setSizeLarge();
 		}
 	}
-	
+
 	class ReturnKeyKeyListener implements KeyListener {
 		private boolean shiftIsPressed = false;
-		
-	    @Override
-	    public void keyTyped(KeyEvent e) {}
 
-	    @Override
-	    public void keyPressed(KeyEvent e) {
+		@Override
+		public void keyTyped(KeyEvent e) {
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			    shiftIsPressed = true;
+				shiftIsPressed = true;
 			}
 			if (e.getKeyCode() == KeyEvent.VK_ENTER && shiftIsPressed) {
-			    gui.clickRunButton();
+				gui.clickRunButton();
 			}
-	    }
+		}
 
-	    @Override
-	    public void keyReleased(KeyEvent e) {
+		@Override
+		public void keyReleased(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			    shiftIsPressed = false;
+				shiftIsPressed = false;
 			}
-	    }
+		}
 	}
 
 	class CheatSheetActionListener implements ActionListener {
@@ -155,11 +156,11 @@ public class Controller {
 
 	class CheatSheetKeyListener implements KeyListener {
 		AsciiCheatSheet cheat;
-		
+
 		public CheatSheetKeyListener(AsciiCheatSheet cheat) {
 			this.cheat = cheat;
 		}
-		
+
 		@Override
 		public void keyTyped(KeyEvent e) {
 		}
@@ -174,7 +175,7 @@ public class Controller {
 		@Override
 		public void keyReleased(KeyEvent e) {
 		}
-		
+
 	}
-	
+
 }

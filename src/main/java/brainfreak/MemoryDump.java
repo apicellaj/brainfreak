@@ -17,15 +17,12 @@ import javax.swing.table.DefaultTableModel;
 
 public class MemoryDump extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6911289527909024022L;
 	private static final int TABLE_HEIGHT = 150;
 	private static final int TABLE_WIDTH = 300;
 
 	public MemoryDump(byte[] memoryCells) {
-		final String[] columnNames = {"Cell", "Memory Value", "Character"};
+		final String[] columnNames = { "Cell", "Memory Value", "Character" };
 		final Object[][] data = getData(memoryCells);
 		final NonEditableModel tableModel = new NonEditableModel(data, columnNames);
 		final JTable memoryTable = new JTable(tableModel);
@@ -46,20 +43,19 @@ public class MemoryDump extends JDialog {
 			@Override
 			public void keyReleased(KeyEvent e) {
 			}
-			
+
 		});
-		
+
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 		// Center JTable cells
 		memoryTable.setDefaultRenderer(Object.class, centerRenderer);
 		// Center JTable headers
-		((JLabel) memoryTable.getTableHeader().getDefaultRenderer())
-		.setHorizontalAlignment(SwingConstants.CENTER);
-		
+		((JLabel) memoryTable.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+
 		memoryTable.setFocusable(false);
 		memoryTable.setRowSelectionAllowed(true);
 		memoryTable.setGridColor(Color.BLACK);
-		
+
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
 		add(new JScrollPane(memoryTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -69,12 +65,12 @@ public class MemoryDump extends JDialog {
 		setSize(new Dimension(TABLE_WIDTH, TABLE_HEIGHT));
 		setVisible(true);
 	}
-	
+
 	private Object[][] getData(byte[] memoryCells) {
 		ArrayList<Object[]> memoryValues = new ArrayList<Object[]>();
 		for (int i = 0; i < memoryCells.length; i++) {
 			if (memoryCells[i] != 0) {
-				memoryValues.add(new Object[] {i, memoryCells[i], (char) memoryCells[i]});
+				memoryValues.add(new Object[] { i, memoryCells[i], (char) memoryCells[i] });
 			}
 		}
 		Object[][] data = new Object[memoryValues.size()][];
@@ -83,19 +79,19 @@ public class MemoryDump extends JDialog {
 		}
 		return data;
 	}
-	
+
 	private class NonEditableModel extends DefaultTableModel {
-		/**
-		 * 
-		 */
+
 		private static final long serialVersionUID = 8212917546343681550L;
+
 		NonEditableModel(Object[][] data, String[] columnNames) {
-	        super(data, columnNames);
-	    }
+			super(data, columnNames);
+		}
+
 		@Override
-	    public boolean isCellEditable(int row, int column) {
-	        return false;
-	    }
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
 	}
-	
+
 }

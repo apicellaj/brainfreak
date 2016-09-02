@@ -10,8 +10,8 @@ public class Brainfreak {
     	    public void run() {
     	    	new Controller(new GUI());
     	    }
-    	});
-		
-    }
+		});
+
+	}
 
 }

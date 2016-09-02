@@ -8,15 +8,13 @@ import javax.swing.SwingWorker;
 
 public class Interpreter extends SwingWorker<Void, String> {
 
-	// TODO: RLE Optimization
-	
 	final static private char memoryDumpChar = '#';
-	
+
 	private Controller controller;
 	private MemoryTape memoryTape;
 	private long startTime;
 	private int[] inputArray;
-	
+
 	private String code = "";
 	private String standardInput = "";
 	private int codePosition = 0;
@@ -64,17 +62,16 @@ public class Interpreter extends SwingWorker<Void, String> {
 			controller.setResultAreaText(chunks.get(chunks.size() - 1));
 		}
 	}
-	
+
 	private void initialize() {
 		replaceWithCode();
 		this.inputArray = createInputArray(standardInput);
 		checkForErrors();
 	}
-	
+
 	private void replaceWithCode() {
-		final String regexPattern = (hasExtendedMode) ? 
-				"[^\\>\\<\\+\\-\\.\\,\\:\\;\\[\\]\\#]" : 
-				"[^\\>\\<\\+\\-\\.\\,\\[\\]\\#]";
+		final String regexPattern = (hasExtendedMode) ? "[^\\>\\<\\+\\-\\.\\,\\:\\;\\[\\]\\#]"
+				: "[^\\>\\<\\+\\-\\.\\,\\[\\]\\#]";
 		this.code = code.replaceAll(regexPattern, "");
 	}
 
@@ -224,7 +221,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 		}
 		return inputCharacterLength <= inputArraySize ? true : false;
 	}
-	
+
 	private boolean hasSingleMemoryDumpChar() {
 		return code.indexOf(memoryDumpChar) == code.lastIndexOf(memoryDumpChar);
 	}
@@ -244,31 +241,31 @@ public class Interpreter extends SwingWorker<Void, String> {
 	public void exitProgram() {
 		stopProgram = true;
 	}
-	
+
 	public void setCode(String code) {
 		this.code = code;
 	}
-	
+
 	public void setInput(String input) {
 		this.standardInput = input;
 	}
-	
+
 	public void setMemoryWrap(boolean hasMemoryWrap) {
 		memoryTape.setMemoryWrap(hasMemoryWrap);
 	}
-	
+
 	public void setExtendedMode(boolean hasExtendedMode) {
 		this.hasExtendedMode = hasExtendedMode;
 	}
-	
+
 	public void setMemoryDump(boolean hasMemoryDump) {
 		this.hasMemoryDump = hasMemoryDump;
 	}
-	
+
 	public void setMemorySize(int memorySize) {
 		memoryTape.setMemorySize(memorySize);
 	}
-	
+
 	public byte[] getMemoryDumpSnapshot() {
 		return memoryDumpSnapshot;
 	}
