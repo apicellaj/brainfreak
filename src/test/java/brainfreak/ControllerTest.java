@@ -12,7 +12,7 @@ import main.java.brainfreak.Controller;
 import main.java.brainfreak.GUI;
 
 public class ControllerTest {
-	
+
 	private String squareNumbers;
 
 	@BeforeClass
@@ -25,9 +25,9 @@ public class ControllerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		squareNumbers = "++++[>+++++<-]>[<+++++>-]+<+[>[>+>+<<-]++>>[<<+>>-]>>>[-]++>[-]+\n" + 
-				">>>+[[-]++++++>>>]<<<[[<++++++++<++>>-]+<.<[>----<-]<]<<[>>>>>[>>>[-]+++\n" +
-				"++++++<[>-<-]+++++++++>[-[<->-]+[<<<]]<[>+<-]>]<<-]<<-]";
+		squareNumbers = "++++[>+++++<-]>[<+++++>-]+<+[>[>+>+<<-]++>>[<<+>>-]>>>[-]++>[-]+\n"
+				+ ">>>+[[-]++++++>>>]<<<[[<++++++++<++>>-]+<.<[>----<-]<]<<[>>>>>[>>>[-]+++\n"
+				+ "++++++<[>-<-]+++++++++>[-[<->-]+[<<<]]<[>+<-]>]<<-]<<-]";
 	}
 
 	@After
@@ -40,21 +40,21 @@ public class ControllerTest {
 		Controller controller = new Controller(gui);
 		controller.setMemoryFieldText("1000");
 		assertEquals(1000, gui.getMemoryFieldValue());
-		
+
 		controller.resetMemoryFieldText();
 		assertEquals(30000, gui.getMemoryFieldValue());
-		
+
 		controller.setCodeAreaText(squareNumbers);
 		gui.clickRunButton();
-		
+
 		controller.setResultAreaText("test");
 		assertEquals("test", gui.getResultAreaText());
-		
+
 		gui.setResultAreaText("reset");
 		gui.resetComboBox();
 		gui.setSizeLarge();
 		assertEquals("reset", gui.getResultAreaText());
-		
+
 		assertFalse(controller.isInDebugMode());
 	}
 

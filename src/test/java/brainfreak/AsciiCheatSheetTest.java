@@ -11,7 +11,7 @@ import org.junit.Test;
 import main.java.brainfreak.AsciiCheatSheet;
 
 public class AsciiCheatSheetTest {
-	
+
 	AsciiCheatSheet cheatSheet;
 
 	@BeforeClass

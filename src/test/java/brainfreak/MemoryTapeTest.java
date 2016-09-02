@@ -11,7 +11,7 @@ import org.junit.Test;
 import main.java.brainfreak.MemoryTextPanel;
 
 public class MemoryTapeTest {
-	
+
 	MemoryTextPanel textPanel;
 
 	@BeforeClass
@@ -35,13 +35,13 @@ public class MemoryTapeTest {
 		textPanel = new MemoryTextPanel();
 		textPanel.setMemoryFieldText("1234567890");
 		assertEquals("123456789", textPanel.getMemoryFieldText());
-		
+
 		textPanel.setMemoryFieldText("");
 		assertEquals("0", textPanel.getMemoryFieldText());
-		
+
 		textPanel.setMemoryFieldText("abcdef");
 		assertEquals("0", textPanel.getMemoryFieldText());
-		
+
 		textPanel.setMemoryFieldText("a1b2c3d4");
 		assertEquals("1234", textPanel.getMemoryFieldText());
 	}

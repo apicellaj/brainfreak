@@ -42,11 +42,11 @@ public class InterpreterTest {
 		memoryWrapUnderflowTest = "<<++++[-<++++++++>]<+.";
 		memoryWrapOverflowTest = ">>>++++[-<++++++++>]<+.";
 		helloWorld = ">++++++++[-<+++++++++>]<.>>+>-[+]++>++>+++[>[->+++<<+++>]<<]>-----.>->"
-					+ "+++..+++.>-.<<+[>[+>+]>>]<--------------.>>.+++.------.--------.>+.>+";
+				+ "+++..+++.>-.<<+[>[+>+]>>]<--------------.>>.+++.------.--------.>+.>+";
 		extendedModeDivision = ";[>+<--[>>+>+<<<-]>>[-[>[<<<+>>>-]<[-]]>[->+<]<]<<]>:>>>:";
 		deletionLoopTest = "++++++++++:[-]:";
-		helloWorldMemoryDump = ">++++++++[-<+++++++++>]<.>>+>-[+]++>++>+++[>[->+++<<+++>]<<" +
-				"]>-----.>->+++..+++.>-.<<+[>[+>+]>>]<--------------.>>.+++.------.--------.>+.>+.#";
+		helloWorldMemoryDump = ">++++++++[-<+++++++++>]<.>>+>-[+]++>++>+++[>[->+++<<+++>]<<"
+				+ "]>-----.>->+++..+++.>-.<<+[>[+>+]>>]<--------------.>>.+++.------.--------.>+.>+.#";
 	}
 
 	@After
@@ -59,17 +59,17 @@ public class InterpreterTest {
 		interpreter.setCode(badBracketsRight);
 		interpreter.run();
 		assertEquals("ERROR: Loop brackets paired incorrectly.\n", interpreter.getResult());
-		
+
 		interpreter = new Interpreter(null);
 		interpreter.setCode(badBracketsLeft);
 		interpreter.run();
 		assertEquals("ERROR: Loop brackets paired incorrectly.\n", interpreter.getResult());
-		
+
 		interpreter = new Interpreter(null);
 		interpreter.setCode("]");
 		interpreter.run();
 		assertEquals("ERROR: Loop brackets paired incorrectly.\n", interpreter.getResult());
-		
+
 		interpreter = new Interpreter(null);
 		interpreter.setCode("[");
 		interpreter.run();
@@ -82,14 +82,14 @@ public class InterpreterTest {
 		interpreter.setInput(unusedInput);
 		interpreter.run();
 		assertEquals("WARNING: Unused input data.\n", interpreter.getResult());
-		
+
 		interpreter = new Interpreter(null);
 		interpreter.setCode(helloWorld);
 		interpreter.setInput(unusedInput);
 		interpreter.run();
 		assertEquals("Hello World!\nWARNING: Unused input data.\n", interpreter.getResult());
 	}
-	
+
 	@Test
 	public void testInsufficientInput() {
 		interpreter = new Interpreter(null);
@@ -104,7 +104,7 @@ public class InterpreterTest {
 		interpreter.setCode(memoryWrapUnderflowTest);
 		interpreter.run();
 		assertEquals("ERROR: Memory Underflow at character 1\n", interpreter.getResult());
-		
+
 		interpreter = new Interpreter(null);
 		interpreter.setCode(memoryWrapOverflowTest);
 		interpreter.setMemorySize(2);
@@ -119,7 +119,7 @@ public class InterpreterTest {
 		interpreter.setMemoryWrap(true);
 		interpreter.run();
 		assertEquals("!", interpreter.getResult());
-		
+
 		interpreter = new Interpreter(null);
 		interpreter.setCode(memoryWrapOverflowTest);
 		interpreter.setMemoryWrap(true);
@@ -134,12 +134,12 @@ public class InterpreterTest {
 		interpreter.setCode(helloWorld);
 		interpreter.run();
 		assertEquals("Hello World!", interpreter.getResult());
-		
+
 		interpreter = new Interpreter(null);
 		interpreter.setCode(helloWorld);
 		interpreter.setMemorySize(1);
 		interpreter.run();
-		assertEquals("ERROR: Memory Overflow at character 0\n", interpreter.getResult());		
+		assertEquals("ERROR: Memory Overflow at character 0\n", interpreter.getResult());
 	}
 
 	@Test
@@ -150,7 +150,7 @@ public class InterpreterTest {
 		interpreter.setExtendedMode(true);
 		interpreter.run();
 		assertEquals("9 1 ", interpreter.getResult());
-		
+
 		interpreter = new Interpreter(null);
 		interpreter.setCode(extendedModeDivision);
 		interpreter.setInput("19 1");
@@ -158,7 +158,7 @@ public class InterpreterTest {
 		interpreter.run();
 		assertEquals("9 1 \nWARNING: Unused input data.\n", interpreter.getResult());
 	}
-	
+
 	@Test
 	public void testDebugInfo() {
 		interpreter = new Interpreter(null);
@@ -166,7 +166,7 @@ public class InterpreterTest {
 		interpreter.run();
 		assertTrue(interpreter.getDebugInfo().startsWith("Executed 0 commands in "));
 	}
-	
+
 	@Test
 	public void testDeleteLoop() {
 		interpreter = new Interpreter(null);
@@ -175,7 +175,7 @@ public class InterpreterTest {
 		interpreter.run();
 		assertEquals("10 0 ", interpreter.getResult());
 	}
-	
+
 	@Test
 	public void testInput() {
 		interpreter = new Interpreter(null);
@@ -183,14 +183,14 @@ public class InterpreterTest {
 		interpreter.setInput("84 101 115 116");
 		interpreter.run();
 		assertEquals("Test", interpreter.getResult());
-		
+
 		interpreter = new Interpreter(null);
 		interpreter.setCode(",.");
 		interpreter.setInput("-1");
 		interpreter.run();
 		assertEquals("", interpreter.getResult());
 	}
-	
+
 	@Test
 	public void testMemoryDump() {
 		interpreter = new Interpreter(new Controller(new GUI()));
@@ -199,12 +199,12 @@ public class InterpreterTest {
 		interpreter.run();
 		byte[] memoryDumpSnapshot = interpreter.getMemoryDumpSnapshot();
 		assertNotNull(memoryDumpSnapshot);
-		
+
 		assertEquals(72, memoryDumpSnapshot[0]);
 		assertEquals(87, memoryDumpSnapshot[2]);
 		assertEquals(100, memoryDumpSnapshot[4]);
 	}
-	
+
 	@Test
 	public void testMemoryDumpOff() {
 		interpreter = new Interpreter(new Controller(new GUI()));
@@ -213,7 +213,7 @@ public class InterpreterTest {
 		interpreter.run();
 		assertNull(interpreter.getMemoryDumpSnapshot());
 	}
-	
+
 	@Test
 	public void testExtraMemoryDumpChar() {
 		interpreter = new Interpreter(new Controller(new GUI()));
@@ -222,16 +222,14 @@ public class InterpreterTest {
 		interpreter.run();
 		byte[] extraMemoryDumpChar = interpreter.getMemoryDumpSnapshot();
 		assertNotNull(extraMemoryDumpChar);
-		
-		assertEquals("Hello World!\n" +
-					"\nWARNING: Extra memory dump character.\n", 
-					interpreter.getResult());
-		
+
+		assertEquals("Hello World!\n" + "\nWARNING: Extra memory dump character.\n", interpreter.getResult());
+
 		assertEquals(0, extraMemoryDumpChar[0]);
 		assertEquals(0, extraMemoryDumpChar[2]);
 		assertEquals(0, extraMemoryDumpChar[4]);
 	}
-	
+
 	@Test
 	public void testMultipleWarnings() {
 		interpreter = new Interpreter(new Controller(new GUI()));
@@ -239,22 +237,17 @@ public class InterpreterTest {
 		interpreter.setInput(unusedInput);
 		interpreter.setMemoryDump(true);
 		interpreter.run();
-		assertEquals("Hello World!\n" +
-					"\n" +
-					"WARNING: Unused input data.\n" +
-					"WARNING: Extra memory dump character.\n",
-					interpreter.getResult());
-		
+		assertEquals(
+				"Hello World!\n" + "\n" + "WARNING: Unused input data.\n" + "WARNING: Extra memory dump character.\n",
+				interpreter.getResult());
+
 		interpreter = new Interpreter(new Controller(new GUI()));
 		interpreter.setCode(helloWorldMemoryDump + "#]");
 		interpreter.setInput(unusedInput);
 		interpreter.setMemoryDump(true);
 		interpreter.run();
-		assertEquals("ERROR: Loop brackets paired incorrectly.\n" + 
-					"\n" + 
-					"WARNING: Unused input data.\n" + 
-					"WARNING: Extra memory dump character.\n",
-					interpreter.getResult());
+		assertEquals("ERROR: Loop brackets paired incorrectly.\n" + "\n" + "WARNING: Unused input data.\n"
+				+ "WARNING: Extra memory dump character.\n", interpreter.getResult());
 	}
 
 }
