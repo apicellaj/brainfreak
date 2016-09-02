@@ -39,7 +39,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 		if (controller != null) {
 			controller.setDebugDisplayLabel("");
 		}
-		startTime = System.currentTimeMillis();
+		startTime = System.nanoTime();
 		decode(codePosition);
 		return null;
 	}
@@ -271,7 +271,7 @@ public class Interpreter extends SwingWorker<Void, String> {
 	}
 
 	public String getDebugInfo() {
-		final long endTime = System.currentTimeMillis();
+		final long endTime = System.nanoTime();
 		final long totalTime = endTime - startTime;
 		return "Executed " + NumberFormat.getInstance().format(numberOfCalculations) + " commands in "
 				+ NumberFormat.getInstance().format(totalTime) + " ms.";
